@@ -22,6 +22,17 @@ from fpdf import FPDF
 from io import BytesIO
 from dotenv import load_dotenv
 
+# Import authentication modules
+from auth import (
+    init_session_state,
+    is_authenticated,
+    is_admin,
+    get_username,
+    get_user_role,
+    logout
+)
+from login import show_login_page
+
 # Import the central category registry
 from category_registry import (
     CATEGORY_REGISTRY,
@@ -1307,6 +1318,15 @@ st.set_page_config(
     layout="centered"
 )
 
+# Initialize authentication state
+init_session_state()
+
+# Check if user is authenticated - if not, show login page
+if not is_authenticated():
+    show_login_page()
+    st.stop()
+
+# User is authenticated - show main app with logout option
 st.title("🧪 Materials Science Assistant (Claude-Powered)")
 st.markdown("""
 Describe the material you need. The app will detect specialized categories 
@@ -1348,8 +1368,21 @@ if "suggested_category_selected" not in st.session_state:
 if "category_approved_for_export" not in st.session_state:
     st.session_state.category_approved_for_export = False
 
-# Sidebar with instructions
+# Sidebar with instructions and user info
 with st.sidebar:
+    # User info and logout
+    st.markdown("---")
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        role_icon = "👑" if is_admin() else "👤"
+        st.markdown(f"**{role_icon} {get_username()}**")
+        st.caption(f"Role: {get_user_role().title()}")
+    with col2:
+        if st.button("🚪", help="Logout", key="logout_btn"):
+            logout()
+            st.rerun()
+    st.markdown("---")
+    
     st.markdown("### 📋 Instructions")
     st.markdown("""
     1. Describe your material or coating need
