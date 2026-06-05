@@ -1443,6 +1443,134 @@ CATEGORY_REGISTRY = {
         "category_specific_disclaimer": "DISCLAIMER: All material parameters, compositions, and performance targets in this report are AI-generated planning defaults based on materials science knowledge. These parameters DO NOT demonstrate proven waterproofing performance, thermal reflectivity, weather resistance, adhesion reliability, durability, code compliance, or commercial readiness. All recommendations are CONDITIONAL upon rigorous laboratory validation, solar-reflectance measurement, thermal-performance testing, adhesion testing per ASTM D3359, crack-bridging verification, accelerated weathering testing per ASTM G154, salt-fog testing per ASTM B117, field thermal-performance measurement, and consultation with qualified coatings engineers, roofing specialists, and building material experts. This report is for research and development guidance only."
     },
     
+    "sodium_ion_battery_anode_composite": {
+        "normalized_category_name": "sodium_ion_battery_anode_composite",
+        "display_name": "Sodium-Ion Battery Anode Composite",
+        "priority": 9,  # Higher specificity than thermal insulation
+        "aliases": ["sodium-ion battery anode", "Na-ion anode", "sodium-ion anode", "battery anode material", "sodium battery electrode"],
+        
+        "priority_keywords": [
+            "sodium-ion battery", "Na-ion", "battery anode", "anode composite", "hard carbon",
+            "conductive carbon black", "sodium-compatible binder", "sodium storage capacity",
+            "specific capacity", "coulombic efficiency", "cycling stability", "rate capability",
+            "mechanical integrity", "irreversible capacity loss", "electrode swelling",
+            "impedance", "electrode", "SEI", "half-cell", "full-cell",
+            "sodium battery", "Na+ storage", "anode material"
+        ],
+        
+        "default_composition": [
+            {"component": "Hard carbon or graphite", "ratio": 0.50},
+            {"component": "Conductive carbon black or carbon nanotubes", "ratio": 0.20},
+            {"component": "Sodium-compatible polymer binder (CMC, PVDF, or SBR)", "ratio": 0.15},
+            {"component": "Inorganic stabilizer (alumina, silica, or clay)", "ratio": 0.10},
+            {"component": "Porosity modifier or pore-forming agent", "ratio": 0.05},
+        ],
+        
+        "category_specific_parameters": {
+            "anode_material_composition": "Hard carbon, graphite, or carbon composite",
+            "particle_size": "microns for electrode material",
+            "specific_capacity_target": "mAh/g at defined current density",
+            "coulombic_efficiency": "% charge recovery (target >95% after 1st cycle, >99% stable)",
+            "cycling_stability": "Capacity retention (%) after 50-500 cycles",
+            "rate_capability": "Capacity at various C-rates (0.1C, 1C, 5C, 10C)",
+            "voltage_window": "V (typical 0-3V for Na-ion anodes)",
+            "first_cycle_irreversible_capacity_loss": "mAh/g or % (minimize SEI formation)",
+            "electrode_swelling": "% volumetric change during sodiation/desodiation",
+            "impedance_evolution": "Electrochemical impedance spectroscopy (EIS) Nyquist plot evolution",
+            "binder_sodium_compatibility": "Verified binder stability with Na+ ions",
+            "mechanical_integrity": "No pulverization or cracking after cycling"
+        },
+        
+        "validation_plan": {
+            "specific_capacity_measurement": "Galvanostatic charging/discharging at defined current density",
+            "coulombic_efficiency_evolution": "First cycle and stable-cycle efficiency assessment",
+            "cycling_performance": "Capacity retention after 50, 100, 500+ cycles",
+            "rate_capability_testing": "Discharge capacity at C/10, C/5, C/2, 1C, 2C, 5C, 10C rates",
+            "electrochemical_impedance_spectroscopy": "EIS before and after cycling (Nyquist plots)",
+            "voltage_profile_analysis": "Charge/discharge voltage profiles at different cycles",
+            "first_cycle_ire_capacity_quantification": "Initial irreversible capacity loss (mAh/g)",
+            "electrode_swelling_measurement": "Volumetric change via dilatometry or microscopy",
+            "mechanical_durability_sem": "SEM morphology before/after cycling (particle integrity)",
+            "compositional_analysis_icp": "Elemental composition by ICP-OES if binder degradation suspected",
+            "sei_layer_analysis": "XPS or Raman spectroscopy for SEI composition and evolution",
+            "thermal_stability_tga": "Thermal decomposition profile (TGA) of anode composite",
+            "half_cell_vs_full_cell_performance": "Full-cell testing with matched cathode for practical performance"
+        },
+        
+        "characterization_methods": [
+            "Galvanostatic Charge/Discharge (GCPL)",
+            "Electrochemical Impedance Spectroscopy (EIS)",
+            "Cyclic Voltammetry (CV)",
+            "Scanning Electron Microscopy (SEM)",
+            "X-ray Photoelectron Spectroscopy (XPS)",
+            "X-ray Diffraction (XRD)",
+            "Raman Spectroscopy",
+            "Thermogravimetric Analysis (TGA)",
+            "Brunauer–Emmett–Teller (BET)",
+            "ICP-OES (elemental composition)"
+        ],
+        
+        "safety_tests": [
+            "Specific capacity and coulombic efficiency",
+            "Cycling durability and capacity retention",
+            "Mechanical integrity after cycling",
+            "SEI layer formation and stability",
+            "Thermal stability (TGA decomposition)",
+            "Electrode swelling and volumetric stability"
+        ],
+        
+        "processing_method": [
+            "1. Precursor Preparation:",
+            "   - Obtain or synthesize hard carbon (from precarbonization of polymers or biomass).",
+            "   - Grind to uniform particle size (e.g., <10 µm) if not purchased as powder.",
+            "   - Sieve and clean to remove contaminants.",
+            "",
+            "2. Carbon Black and Additive Blending:",
+            "   - Weigh conductive carbon black or carbon nanotubes (20 wt%).",
+            "   - Weigh inorganic stabilizer (alumina or silica, 10 wt%).",
+            "   - Weigh porosity modifier (5 wt%) if included.",
+            "   - Dry-blend all components under gentle mixing to avoid agglomeration.",
+            "",
+            "3. Binder Solution Preparation:",
+            "   - Dissolve sodium-compatible binder (CMC, PVDF, or SBR) in compatible solvent (DI water for CMC, NMP for PVDF, aqueous dispersion for SBR).",
+            "   - Target binder loading: 10-15 wt% of final electrode.",
+            "   - Degas to remove air bubbles.",
+            "",
+            "4. Slurry Formation:",
+            "   - Add dry-blended carbon materials to binder solution in multiple portions.",
+            "   - Mix thoroughly under mechanical stirring (e.g., planetary mill or high-shear mixer).",
+            "   - Avoid excessive mixing that may damage carbon structure.",
+            "   - Target slurry viscosity: suitable for casting or coating (50-500 cP).",
+            "",
+            "5. Electrode Fabrication:",
+            "   - Cast or coat slurry onto copper or aluminum current collector (typical thickness: 50-200 µm).",
+            "   - Use doctor blade, slot-die, or spray coating for uniform thickness.",
+            "   - Control wet thickness to achieve target 1-5 mg/cm² anode loading after drying.",
+            "",
+            "6. Drying:",
+            "   - Air-dry at room temperature for 30 minutes to 2 hours.",
+            "   - Optional: gentle heat (50-80°C) for faster drying if solvent permits.",
+            "   - Avoid excessive temperature (risk of binder decomposition or Na+ ion hydration issues).",
+            "",
+            "7. Final Drying and Conditioning:",
+            "   - Vacuum dry at 60-80°C for 4-12 hours to remove residual solvent and moisture.",
+            "   - Condition in dry glove box or desiccator to maintain sodium compatibility.",
+            "   - Avoid exposure to air and moisture (Na+ reactivity).",
+            "",
+            "8. Half-Cell Assembly (Electrochemical Testing):",
+            "   - Assemble into half-cell: anode | separator | Na+ metal reference electrode.",
+            "   - Use non-aqueous electrolyte (e.g., 1 M NaClO4 in organic solvent).",
+            "   - Perform electrochemical characterization (GCPL, EIS, CV) per validation plan.",
+            "",
+            "9. Evidence Boundary:",
+            "   - This is a planning-level fabrication route for research guidance.",
+            "   - Exact hard carbon source, carbon black type, binder percentage, casting thickness, and drying protocol must be optimized experimentally.",
+            "   - No commercial sodium-ion battery or electrochemical performance claim should be made before half-cell and full-cell validation."
+        ],
+        
+        "category_specific_disclaimer": "DISCLAIMER: All material parameters, compositions, and performance targets in this report are AI-generated planning defaults based on materials science and electrochemistry knowledge. These parameters DO NOT demonstrate proven specific capacity, coulombic efficiency, cycling stability, rate capability, mechanical durability, thermal stability, safety, regulatory compliance, or commercial readiness for sodium-ion batteries. All recommendations are CONDITIONAL upon rigorous laboratory validation, electrochemical characterization per half-cell and full-cell testing, cycling durability assessment, SEM/XPS analysis of electrode morphology and SEI evolution, thermal-stability analysis, full-cell integration testing, and consultation with qualified materials engineers, battery scientists, electrochemists, and battery-system specialists. This report is for research and development guidance only."
+    },
+    
     "other_material": {
         "normalized_category_name": "other_material",
         "display_name": "Other (Custom Material)",
@@ -2435,6 +2563,38 @@ def detect_category_conflicts(user_request: str, selected_category: str) -> dict
                 "conflict_detected": True,
                 "conflict_reason": f"Request mentions thermal insulation and building materials, but selected category is {CATEGORY_REGISTRY.get(selected_category, {}).get('display_name', selected_category)}. These are incompatible.",
                 "recommended_category": "thermal_insulation_composite",
+                "blocked_export": True
+            }
+    
+    # **CRITICAL DOMAIN-MISMATCH RULE: Sodium-Ion Battery Anode Detection**
+    # This rule prevents misclassification of battery anodes as thermal insulation
+    # Domain mismatch should trigger new-category workflow EVEN WITH HIGH CONFIDENCE
+    sodium_ion_battery_keywords = [
+        "sodium-ion battery", "na-ion", "battery anode", "anode composite", "hard carbon",
+        "conductive carbon black", "sodium-compatible binder", "sodium storage capacity",
+        "specific capacity", "coulombic efficiency", "cycling stability", "rate capability",
+        "mechanical integrity", "irreversible capacity loss", "electrode swelling",
+        "impedance", "electrode", "sei", "half-cell", "full-cell",
+        "sodium battery", "na+ storage", "anode material", "sodium battery anode",
+        "sodium-ion anode", "na ion", "sodium ion battery", "battery electrode"
+    ]
+    
+    if any(kw.lower() in request_lower for kw in sodium_ion_battery_keywords):
+        if selected_category == "thermal_insulation_composite":
+            # HARD BLOCK: This is a strong domain mismatch
+            # Battery electrodes should NOT be classified as thermal insulation
+            return {
+                "conflict_detected": True,
+                "conflict_reason": "DOMAIN MISMATCH DETECTED: This request clearly describes a sodium-ion battery anode composite (electrochemistry domain), but was classified as Thermal Insulation Composite (building materials domain). These domains are incompatible. The Sodium-Ion Battery Anode Composite category is available.",
+                "recommended_category": "sodium_ion_battery_anode_composite",
+                "blocked_export": True  # CRITICAL: Block export for domain mismatch
+            }
+        elif selected_category not in ["sodium_ion_battery_anode_composite", "adsorbent_heavy_metals"]:
+            # If battery keywords present but category not set to battery anode, suggest it
+            return {
+                "conflict_detected": True,
+                "conflict_reason": "This request describes sodium-ion battery anode material. The more appropriate category 'Sodium-Ion Battery Anode Composite' is available for electrochemical validation.",
+                "recommended_category": "sodium_ion_battery_anode_composite",
                 "blocked_export": True
             }
     

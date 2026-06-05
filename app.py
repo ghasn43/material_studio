@@ -1680,6 +1680,7 @@ if "show_result" in st.session_state and st.session_state.get("show_result"):
             "adsorbent_heavy_metals": "Adsorbent for Heavy Metals",
             "co2_capture_material": "Carbon Dioxide Capture Material",
             "thermal_insulation_composite": "Thermal Insulation Composite",
+            "sodium_ion_battery_anode_composite": "Sodium-Ion Battery Anode Composite",
             "self_cleaning_building_coating": "Self-Cleaning Photocatalytic Building Coating",
             "other_material": "Other Material"
         }
@@ -2059,8 +2060,13 @@ if "show_result" in st.session_state and st.session_state.get("show_result"):
             if header_count == len(content_lines):  # Only headers, no content
                 processing_method_incomplete = True
     
+    # **NEW: Check for domain-mismatch blocking before export**
+    material_category = result.get("material_category", "other_material")
+    conflict_check = detect_category_conflicts(user_prompt, material_category)
+    blocked_by_domain_mismatch = conflict_check.get("blocked_export", False)
+    
     # Export button logic
-    can_export = three_stage_result["overall_status"] != "fail" and not processing_method_incomplete
+    can_export = three_stage_result["overall_status"] != "fail" and not processing_method_incomplete and not blocked_by_domain_mismatch
     export_disabled_reason = ""
     
     # Check composition validation
@@ -2072,6 +2078,10 @@ if "show_result" in st.session_state and st.session_state.get("show_result"):
         export_disabled_reason = "Verification failed"
     elif processing_method_incomplete:
         export_disabled_reason = "Processing method incomplete"
+    elif blocked_by_domain_mismatch:
+        # **NEW: Block export due to domain mismatch**
+        export_disabled_reason = "Domain mismatch detected (incompatible category)"
+        can_export = False
     elif composition_invalid:
         export_disabled_reason = "Invalid substrate/environment objects in composition"
         can_export = False
