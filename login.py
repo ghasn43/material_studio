@@ -62,36 +62,34 @@ def show_login_page():
         with tab1:
             st.markdown("### Sign In")
             
-            # Input fields with placeholders only (no labels)
-            col_id, col_pass = st.columns(2)
+            # Input fields - full width for better UX
+            identifier = st.text_input(
+                label="identifier",
+                placeholder="Enter identifier",
+                label_visibility="collapsed",
+                key=f"login_id_{role}"
+            )
             
-            with col_id:
-                identifier = st.text_input(
-                    "identifier",
-                    placeholder="Enter identifier",
-                    label_visibility="collapsed",
-                    key=f"login_id_{role}"
-                )
-            
-            with col_pass:
-                password = st.text_input(
-                    "password",
-                    type="password",
-                    placeholder="Enter code",
-                    label_visibility="collapsed",
-                    key=f"login_pass_{role}"
-                )
+            password = st.text_input(
+                label="password",
+                type="password",
+                placeholder="Enter code",
+                label_visibility="collapsed",
+                key=f"login_pass_{role}"
+            )
             
             if st.button("🔓 Access System", use_container_width=True, type="primary"):
-                if not identifier or not password:
+                if not identifier.strip() or not password.strip():
                     st.error("⚠️ Both fields required")
-                elif verify_credentials(identifier, password, role):
-                    set_authenticated(identifier, role)
-                    st.success(f"✅ Welcome, {identifier}!")
-                    st.balloons()
-                    st.rerun()
                 else:
-                    st.error("❌ Invalid credentials")
+                    # Debug: Show what we're checking
+                    if verify_credentials(identifier.strip(), password.strip(), role):
+                        set_authenticated(identifier.strip(), role)
+                        st.success(f"✅ Welcome, {identifier}!")
+                        st.balloons()
+                        st.rerun()
+                    else:
+                        st.error(f"❌ Invalid credentials for {role} account")
             
             # Display demo credentials
             st.info("📝 Demo Credentials:\n\n" +
@@ -100,30 +98,26 @@ def show_login_page():
         with tab2:
             st.markdown("### Create Account")
             
-            col_id2, col_pass2 = st.columns(2)
+            new_identifier = st.text_input(
+                label="new_id",
+                placeholder="Choose identifier",
+                label_visibility="collapsed",
+                key=f"reg_id_{role}"
+            )
             
-            with col_id2:
-                new_identifier = st.text_input(
-                    "new_id",
-                    placeholder="Choose identifier",
-                    label_visibility="collapsed",
-                    key=f"reg_id_{role}"
-                )
-            
-            with col_pass2:
-                new_password = st.text_input(
-                    "new_pass",
-                    type="password",
-                    placeholder="Set code",
-                    label_visibility="collapsed",
-                    key=f"reg_pass_{role}"
-                )
+            new_password = st.text_input(
+                label="new_pass",
+                type="password",
+                placeholder="Set code (min 6 chars)",
+                label_visibility="collapsed",
+                key=f"reg_pass_{role}"
+            )
             
             if st.button("✨ Create Account", use_container_width=True):
-                if not new_identifier or not new_password:
+                if not new_identifier.strip() or not new_password.strip():
                     st.error("⚠️ Both fields required")
                 else:
-                    result = register_user(new_identifier, new_password, role)
+                    result = register_user(new_identifier.strip(), new_password.strip(), role)
                     if result["success"]:
                         st.success(f"✅ {result['message']}")
                         st.info("Now try signing in with your new credentials")
