@@ -1636,6 +1636,7 @@ CATEGORY_REGISTRY = {
 CATEGORY_PRIORITY_ORDER = [
     "fabric_oil_stain_removal_composite",  # HIGHEST PRIORITY: fabric/laundry stain removal (NEW)
     "roof_waterproofing_thermal_insulation_coating",  # HIGHEST: specific roof coating
+    "sodium_ion_battery_anode_composite",  # HIGH: Battery electrode domain guardrail (catches battery anodes before thermal insulation)
     "oil_gas_produced_water_pretreatment_media",  # HIGH: More specific than desalination pre-treatment for oilfield water
     "desalination_pretreatment_media",  # Check desalination pre-treatment FIRST (before membrane_water_treatment)
     "membrane_water_treatment",
@@ -1679,6 +1680,13 @@ def normalize_category_name(category_input: str) -> str:
         "roof_waterproofing_thermal_insulation_coating": "roof_waterproofing_thermal_insulation_coating",
         "Roof Waterproofing & Thermal Insulation Coating": "roof_waterproofing_thermal_insulation_coating",
         "roof waterproofing thermal insulation coating": "roof_waterproofing_thermal_insulation_coating",
+        
+        "sodium_ion_battery_anode_composite": "sodium_ion_battery_anode_composite",
+        "Sodium-Ion Battery Anode Composite": "sodium_ion_battery_anode_composite",
+        "sodium ion battery anode": "sodium_ion_battery_anode_composite",
+        "sodium-ion anode": "sodium_ion_battery_anode_composite",
+        "battery anode composite": "sodium_ion_battery_anode_composite",
+        "na-ion anode": "sodium_ion_battery_anode_composite",
         
         "desalination_pretreatment_media": "desalination_pretreatment_media",
         "Desalination Pre-Treatment Media": "desalination_pretreatment_media",
@@ -2210,6 +2218,26 @@ def classify_material_hierarchically(user_request: str) -> dict:
         heavy_metal_keywords = ["heavy metal", "lead", "cadmium", "arsenic", "chromium"]
         if not any(hm in request_lower for hm in heavy_metal_keywords):
             preset_scores["membrane_water_treatment"] = 100
+    
+    # **CRITICAL RULE 8: BATTERY ELECTRODE DOMAIN GUARDRAIL** ← Must run BEFORE normal classification
+    # This prevents misclassification of battery anodes as thermal insulation or other categories
+    battery_electrode_keywords = [
+        "sodium-ion battery", "na-ion", "battery anode", "anode composite", "hard carbon",
+        "conductive carbon black", "sodium-compatible binder", "sodium storage",
+        "specific capacity", "coulombic efficiency", "rate capability", "cycling stability",
+        "cycling durability", "electrode swelling", "impedance", "electrochemical impedance",
+        "sei", "half-cell", "full-cell", "current collector", "electrode",
+        "sodium battery", "na+ storage", "anode material", "galvanostatic",
+        "na metal", "sodium metal", "battery electrode", "half cell"
+    ]
+    
+    # Check if request contains STRONG battery keywords
+    battery_keyword_count = sum(1 for kw in battery_electrode_keywords if kw in request_lower)
+    if battery_keyword_count >= 2:  # At least 2 battery keywords for high confidence
+        # HARD OVERRIDE: Battery prompts go to sodium_ion_battery_anode_composite
+        # This overrides any other classification including thermal insulation
+        preset_scores["sodium_ion_battery_anode_composite"] = 100
+    
     matched_keywords_map = {}
     priority_rule_scores = preset_scores.copy()  # Save priority rule results
     
