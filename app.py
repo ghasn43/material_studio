@@ -1036,6 +1036,75 @@ def sanitize_for_pdf(text):
     return text
 
 
+def handle_manual_category_override(selected_category_display: str, selected_category_key: str, 
+                                   material_data: dict, user_prompt: str) -> tuple:
+    """
+    Handle manual category override by user.
+    
+    When user manually selects a category from dropdown, this function:
+    1. Normalizes the category name
+    2. Updates session state  
+    3. Clears old preset fields
+    4. Applies the new category preset
+    5. Reruns verification
+    6. Updates export state
+    7. Returns updated material_data and verification_result
+    
+    Args:
+        selected_category_display: Display name of category (e.g., "Phosphate Recovery Material")
+        selected_category_key: Category key (e.g., "phosphate_recovery_material")
+        material_data: Current material data dict
+        user_prompt: User's material request prompt
+    
+    Returns:
+        tuple: (updated_material_data, verification_result)
+    """
+    # Normalize the category name
+    normalized_category = normalize_category_name(selected_category_key)
+    
+    # Get display name from registry
+    display_name = get_category_display_name(normalized_category)
+    
+    # Update session state
+    st.session_state["selected_category"] = normalized_category
+    st.session_state["manual_category_override"] = True
+    st.session_state["category_confirmed_by_user"] = True
+    
+    # Clear old preset fields from previous category
+    material_data = clear_previous_preset_fields(material_data)
+    
+    # Update material category in data
+    material_data["category"] = normalized_category
+    material_data["material_category"] = normalized_category
+    material_data["material_category_display"] = display_name
+    
+    # Apply the newly selected category preset
+    material_data = apply_category_preset(material_data, normalized_category)
+    
+    # Run three-stage verification with the new category
+    verification_result = run_three_stage_verification(
+        user_request=user_prompt,
+        selected_category=normalized_category,
+        material_data=material_data,
+        stored_confidence=None
+    )
+    
+    # Update session state with results
+    st.session_state["material_data"] = material_data
+    st.session_state["verification_result"] = verification_result
+    st.session_state["result"] = material_data  # Keep both references for compatibility
+    
+    # Update export state based on verification result
+    can_export = verification_result["overall_status"] in ["pass", "warning"]
+    st.session_state["export_allowed"] = can_export
+    st.session_state["can_generate_pdf"] = can_export
+    
+    # Show success message to user
+    st.success(f"✅ Category manually updated to **{display_name}**\n\nPreset reapplied and verification rerun.")
+    
+    return material_data, verification_result
+
+
 def generate_pdf(user_prompt, result, three_stage_result=None):
     """Generate professional PDF report with preset parameters and validation plan."""
     pdf = FPDF()
@@ -2038,12 +2107,19 @@ All compositions, parameters, and processing methods are AI-generated defaults b
         with col1:
             if st.button("✅ Use Selected Category", use_container_width=True, key="use_selected_category"):
                 if selected_category_key != material_category:
-                    # Clear old preset fields and apply new category
-                    st.session_state['result'] = clear_previous_preset_fields(result)
-                    st.session_state['result'] = apply_category_preset(st.session_state['result'], selected_category_key)
-                    st.session_state['correction_applied'] = "category_changed"
-                    st.success(f"✅ Changed to {selected_category_dropdown}. Re-running verification...")
-                    st.rerun()
+                    # Use the new handle_manual_category_override function
+                    try:
+                        updated_material_data, updated_verification = handle_manual_category_override(
+                            selected_category_display=selected_category_dropdown,
+                            selected_category_key=selected_category_key,
+                            material_data=result,
+                            user_prompt=user_prompt
+                        )
+                        st.session_state['correction_applied'] = "category_changed"
+                        # Rerun to refresh the UI with new category and verification results
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"❌ Error applying category override: {str(e)}")
                 else:
                     st.info("Category is already selected.")
         
