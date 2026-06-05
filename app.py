@@ -414,7 +414,17 @@ def regenerate_conflict_check(user_prompt: str, category_key: str) -> dict:
 
 # Load environment variables
 load_dotenv()
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+
+# Try to get API key from Streamlit Secrets first (for Streamlit Cloud)
+# Fall back to environment variables (for local development)
+try:
+    ANTHROPIC_API_KEY = st.secrets.get("ANTHROPIC_API_KEY")
+except (AttributeError, KeyError):
+    ANTHROPIC_API_KEY = None
+
+# If not in Streamlit Secrets, try environment variables
+if not ANTHROPIC_API_KEY:
+    ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 
 if ANTHROPIC_API_KEY:
     claude_client = Anthropic(api_key=ANTHROPIC_API_KEY)
@@ -1310,11 +1320,16 @@ targets, and validation protocols.
 if not validate_api_key():
     st.error(
         "❌ **Anthropic API Key Not Found**\n\n"
-        "Please set up your Claude API key:\n"
+        "**For Streamlit Cloud:**\n"
+        "1. Go to your app settings (gear icon)\n"
+        "2. Click 'Secrets'\n"
+        "3. Add: `ANTHROPIC_API_KEY=your-api-key-here`\n"
+        "4. Redeploy the app\n\n"
+        "**For Local Development:**\n"
         "1. Create a `.env` file in the app directory\n"
         "2. Add: `ANTHROPIC_API_KEY=your-api-key-here`\n"
-        "3. Get your key from https://console.anthropic.com\n"
-        "4. Restart the app"
+        "3. Restart the app\n\n"
+        "Get your API key from https://console.anthropic.com"
     )
     st.stop()
 
