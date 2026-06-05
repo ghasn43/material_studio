@@ -37,6 +37,7 @@ from login import show_login_page
 from category_registry import (
     CATEGORY_REGISTRY,
     CATEGORY_PRIORITY_ORDER,
+    CATEGORY_TO_DOMAIN,
     HIERARCHICAL_PRESETS,
     MATERIAL_FAMILIES,
     FUNCTIONAL_CLASSES,
@@ -55,6 +56,8 @@ from category_registry import (
     normalize_category_name,  # NEW: for normalizing category names
     validate_composition_components,  # NEW: validate composition doesn't contain substrates
     clean_composition_components,  # NEW: remove substrate/environment items from composition
+    detect_prompt_domain,  # NEW: detect domain from user request
+    validate_domain_category_alignment,  # NEW: validate domain-category alignment
 )
 
 # Import scientific dataset verification
@@ -931,18 +934,31 @@ def enrich_with_preset(user_prompt, ai_result):
     Ensures consistent preset application across all material categories.
     
     Process:
-    1. Classify the material using hierarchical classification
-    2. Apply the category preset to ai_result
-    3. Add classification warnings if using fallback category
+    1. Detect domain from user request (DOMAIN-FIRST)
+    2. Classify the material using hierarchical classification
+    3. Apply the category preset to ai_result
+    4. Validate domain-category alignment
+    5. Add classification warnings if using fallback category
     """
+    # Step 1: DETECT DOMAIN FIRST
+    domain_detection = detect_prompt_domain(user_prompt)
+    ai_result["detected_domain"] = domain_detection["domain"]
+    ai_result["detected_domain_confidence"] = domain_detection["confidence"]
+    ai_result["detected_domain_keywords"] = domain_detection["matched_keywords"]
+    
+    # Step 2: Classify the material using hierarchical classification
     hier_classification = detect_material_category(user_prompt)
     preset_key = hier_classification.get("specific_preset", "other_material")
     display_name = CATEGORY_REGISTRY.get(preset_key, {}).get("display_name", preset_key)
     
-    # Apply category preset from registry
+    # Step 3: Apply category preset from registry
     ai_result = apply_category_preset(ai_result, preset_key)
     
-    # Add warning if not in registry (Other category)
+    # Step 4: Validate domain-category alignment
+    alignment = validate_domain_category_alignment(domain_detection["domain"], preset_key)
+    ai_result["domain_alignment"] = alignment
+    
+    # Step 5: Add warning if not in registry (Other category)
     if preset_key == "other_material":
         ai_result["classification_warning"] = "No category-specific preset exists for this material. The report may be incomplete."
     
@@ -1603,6 +1619,36 @@ if "show_result" in st.session_state and st.session_state.get("show_result"):
                     st.stop()  # Wait for user action
     # ===== END SUGGESTED CATEGORY WORKFLOW =====
     
+    # ===== DOMAIN DETECTION AND ALIGNMENT CHECK =====
+    # Display detected domain and check alignment with category
+    detected_domain = result.get("detected_domain", "unknown")
+    domain_confidence = result.get("detected_domain_confidence", 0)
+    domain_alignment = result.get("domain_alignment", {})
+    
+    st.markdown("### 🎯 Request Analysis")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        # Detected domain
+        domain_emoji = "✅" if domain_confidence >= 60 else "⚠️"
+        st.markdown(f"**Detected Domain:** {domain_emoji} {detected_domain.replace('_', ' ').title()}")
+        st.caption(f"Confidence: {domain_confidence}%")
+    
+    with col2:
+        # Material Category
+        category_display = result.get("material_category_display", result.get("material_category", "N/A"))
+        st.markdown(f"**Selected Category:** `{category_display}`")
+    
+    # Show domain mismatch warning if alignment fails
+    if not domain_alignment.get("aligned", True):
+        st.warning(f"⚠️ **Domain Mismatch Detected**\n\nThe request appears to be about **{domain_alignment.get('prompt_domain', 'unknown').replace('_', ' ').title()}** but the selected category is for **{domain_alignment.get('category_domain', 'unknown').replace('_', ' ').title()}**.\n\nThis may affect report accuracy. Consider using the category suggestion panel below.")
+        # Store blocking reason for export logic
+        st.session_state['domain_mismatch_blocking'] = domain_alignment.get("blocking_export", False)
+    else:
+        st.session_state['domain_mismatch_blocking'] = False
+    
+    # ===== END DOMAIN DETECTION AND ALIGNMENT CHECK =====
+    
     # Material Category
     category_display = result.get("material_category_display", result.get("material_category", "N/A"))
     st.markdown(f"**Material Category:** `{category_display}`")
@@ -2071,7 +2117,20 @@ All compositions, parameters, and processing methods are AI-generated defaults b
     # **NEW: Check for domain-mismatch blocking before export**
     material_category = result.get("material_category", "other_material")
     conflict_check = detect_category_conflicts(user_prompt, material_category)
-    blocked_by_domain_mismatch = conflict_check.get("blocked_export", False)
+    
+    # Check domain-category alignment (NEW DOMAIN-FIRST VALIDATION)
+    domain_alignment = result.get("domain_alignment", {})
+    blocked_by_domain_mismatch = False
+    domain_mismatch_reason = ""
+    
+    if not domain_alignment.get("aligned", True) and domain_alignment.get("prompt_domain") != "unknown":
+        # Only block if domain is known (not "unknown") and doesn't align
+        blocked_by_domain_mismatch = True
+        domain_mismatch_reason = domain_alignment.get("blocking_export", "Domain and category do not match")
+    
+    # Also check old conflict detection for backward compatibility
+    old_blocked = conflict_check.get("blocked_export", False)
+    blocked_by_domain_mismatch = blocked_by_domain_mismatch or old_blocked
     
     # Export button logic
     can_export = three_stage_result["overall_status"] != "fail" and not processing_method_incomplete and not blocked_by_domain_mismatch
@@ -2101,6 +2160,9 @@ All compositions, parameters, and processing methods are AI-generated defaults b
     if st.button("📥 Generate PDF Report", use_container_width=True, type="secondary", disabled=not can_export):
         if three_stage_result["overall_status"] == "fail":
             st.error("Cannot export: Verification failed. Please use the correction options above.")
+        elif blocked_by_domain_mismatch:
+            # **NEW: Show domain mismatch error**
+            st.error(f"🚫 Cannot export: {domain_mismatch_reason}\n\nPlease select a category that matches the detected domain, or use the category suggestion panel above.")
         elif processing_method_incomplete:
             st.error("❌ Processing method incomplete. Please apply processing preset before export.")
         elif composition_invalid:

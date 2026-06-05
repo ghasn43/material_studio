@@ -21,6 +21,153 @@ except ImportError:
     SCIENTIFIC_VERIFICATION_AVAILABLE = False
 
 # ============================================================================
+# DOMAIN DETECTION SYSTEM (Domain-First Classification)
+# ============================================================================
+# This system detects the actual domain of the user request BEFORE category classification.
+# It prevents misclassification by filtering out generic keywords that could match multiple domains.
+
+DOMAIN_KEYWORDS = {
+    "battery_electrode": {
+        "keywords": [
+            "sodium-ion battery", "na-ion", "battery anode", "anode composite", "hard carbon",
+            "conductive carbon black", "sodium-compatible binder", "sodium storage",
+            "specific capacity", "coulombic efficiency", "rate capability", "cycling stability",
+            "cycling durability", "electrode swelling", "impedance", "electrochemical impedance",
+            "sei", "half-cell", "full-cell", "current collector", "electrode",
+            "sodium battery", "na+ storage", "anode material", "galvanostatic",
+            "na metal", "sodium metal", "battery electrode", "half cell", "li-ion",
+            "lithium-ion", "battery performance", "battery testing"
+        ],
+        "min_keywords": 2
+    },
+    "phosphate_recovery": {
+        "keywords": [
+            "phosphate recovery", "orthophosphate", "phosphate uptake", "fertilizer reuse",
+            "nutrient recovery", "nutrient release", "adsorption/desorption", "agricultural wastewater",
+            "pH dependence", "competing ions", "phosphorus recovery", "phosphate removal",
+            "nutrient removal", "wastewater phosphate", "phosphate binding", "phosphate release",
+            "phosphate adsorbent", "nutrient cycling", "agricultural runoff"
+        ],
+        "min_keywords": 2
+    },
+    "carbon_capture": {
+        "keywords": [
+            "CO2 capture", "carbon dioxide capture", "flue gas", "CO2/N2 selectivity",
+            "amine-functionalized", "regeneration energy", "amine loss", "carbon capture",
+            "carbon dioxide", "direct air capture", "dac", "CO2 separation", "CO2 adsorption",
+            "greenhouse gas", "emissions reduction", "carbon sequestration"
+        ],
+        "min_keywords": 1
+    },
+    "oil_gas_produced_water": {
+        "keywords": [
+            "produced water", "oil and gas", "oilfield", "oil and grease", "oil/grease",
+            "hydrocarbons", "hydrocarbon", "TOC", "COD", "sulfide", "reinjection",
+            "reuse", "ADNOC", "UAE oil", "gulf conditions", "hot gulf", "backwash",
+            "downstream membrane fouling", "produced-water", "oil production", "gas field",
+            "reservoir", "petroleum", "crude oil", "wellhead", "offshore"
+        ],
+        "min_keywords": 2
+    },
+    "desalination_pretreatment": {
+        "keywords": [
+            "desalination pre-treatment", "desalination pretreatment", "pre-treatment media",
+            "seawater treatment", "desal pre-treatment", "pretreatment media", "desalination",
+            "salt removal", "brine", "brackish water", "reverse osmosis", "RO pretreatment"
+        ],
+        "min_keywords": 1
+    },
+    "fabric_cleaning": {
+        "keywords": [
+            "fabric", "cotton", "clothing", "laundry", "garment", "textile", "cloth",
+            "oil stain", "grease stain", "washing", "pre-treat", "pre-wash",
+            "stain removal from fabric", "fabric stain", "fabric-safe", "colorfastness"
+        ],
+        "min_keywords": 2
+    },
+    "roof_waterproofing": {
+        "keywords": [
+            "roof", "rooftop", "roof-applied", "concrete roof", "waterproofing",
+            "rainwater leakage", "water leakage", "roof coating", "building roof",
+            "roof membrane", "roof protection", "roof sealant"
+        ],
+        "min_keywords": 2
+    },
+    "atmospheric_water_harvesting": {
+        "keywords": [
+            "atmospheric water", "water harvesting", "fog harvesting", "air humidity",
+            "moisture capture", "desiccant", "hygroscopic", "water from air"
+        ],
+        "min_keywords": 2
+    },
+    "photocatalytic_water_treatment": {
+        "keywords": [
+            "photocatalytic", "photocatalysis", "TiO2", "water treatment",
+            "dye degradation", "pollutant degradation", "UV-activated", "light-driven"
+        ],
+        "min_keywords": 2
+    },
+    "self_cleaning_building": {
+        "keywords": [
+            "self-cleaning", "self cleaning", "exterior coating", "building coating",
+            "facade coating", "photocatalytic nanoparticles", "facade", "exterior",
+            "self-cleaning surface", "dirt repellent", "dust repellent"
+        ],
+        "min_keywords": 2
+    },
+    "heavy_metal_adsorption": {
+        "keywords": [
+            "heavy metal", "lead removal", "cadmium removal", "arsenic removal",
+            "chromium removal", "toxic metal", "metal ion", "Pb", "Cd", "As", "Cr",
+            "metal contamination", "metal adsorbent", "metal binding"
+        ],
+        "min_keywords": 2
+    },
+    "potassium_brine": {
+        "keywords": [
+            "potassium", "potassium brine", "K+ recovery", "brine separation",
+            "KCl recovery", "potassium chloride", "salt recovery"
+        ],
+        "min_keywords": 2
+    },
+    "membrane_treatment": {
+        "keywords": [
+            "membrane", "anti-fouling", "polymer membrane", "pvdf", "pes", "filtration",
+            "microfiltration", "ultrafiltration", "nanofiltration", "mixed-matrix",
+            "water flux", "permeability", "rejection efficiency", "fouling resistance"
+        ],
+        "min_keywords": 2
+    },
+    "thermal_insulation": {
+        "keywords": [
+            "thermal", "insulation", "thermal insulation", "thermal resistance",
+            "heat resistance", "temperature stability", "thermal conductivity",
+            "insulating", "insulator", "thermal barrier"
+        ],
+        "min_keywords": 2
+    }
+}
+
+# Map categories to domains
+CATEGORY_TO_DOMAIN = {
+    "sodium_ion_battery_anode_composite": "battery_electrode",
+    "phosphate_recovery_material": "phosphate_recovery",
+    "co2_capture_material": "carbon_capture",
+    "oil_gas_produced_water_pretreatment_media": "oil_gas_produced_water",
+    "desalination_pretreatment_media": "desalination_pretreatment",
+    "fabric_oil_stain_removal_composite": "fabric_cleaning",
+    "roof_waterproofing_thermal_insulation_coating": "roof_waterproofing",
+    "atmospheric_water_harvesting_material": "atmospheric_water_harvesting",
+    "photocatalytic_coating": "photocatalytic_water_treatment",
+    "self_cleaning_building_coating": "self_cleaning_building",
+    "adsorbent_heavy_metals": "heavy_metal_adsorption",
+    "potassium_brine_separation_material": "potassium_brine",
+    "membrane_water_treatment": "membrane_treatment",
+    "thermal_insulation_composite": "thermal_insulation",
+    "other_material": "unknown"
+}
+
+# ============================================================================
 # CENTRAL CATEGORY REGISTRY (Single Source of Truth)
 # ============================================================================
 
@@ -1641,6 +1788,7 @@ CATEGORY_PRIORITY_ORDER = [
     "fabric_oil_stain_removal_composite",  # HIGHEST PRIORITY: fabric/laundry stain removal (NEW)
     "roof_waterproofing_thermal_insulation_coating",  # HIGHEST: specific roof coating
     "sodium_ion_battery_anode_composite",  # HIGH: Battery electrode domain guardrail (catches battery anodes before thermal insulation)
+    "phosphate_recovery_material",  # HIGH: Check phosphate-specific recovery BEFORE oil/gas (phosphate keywords are more distinctive)
     "oil_gas_produced_water_pretreatment_media",  # HIGH: More specific than desalination pre-treatment for oilfield water
     "desalination_pretreatment_media",  # Check desalination pre-treatment FIRST (before membrane_water_treatment)
     "membrane_water_treatment",
@@ -1649,7 +1797,6 @@ CATEGORY_PRIORITY_ORDER = [
     "thermal_insulation_composite",
     "atmospheric_water_harvesting_material",
     "photocatalytic_coating",
-    "phosphate_recovery_material",
     "potassium_brine_separation_material",
     "adsorbent_heavy_metals",  # Lower priority to prevent misclassification
     "other_material",
@@ -1769,6 +1916,121 @@ def normalize_category_name(category_input: str) -> str:
     
     # Default fallback
     return "other_material"
+
+
+# ============================================================================
+# DOMAIN DETECTION FUNCTIONS (Domain-First Classification)
+# ============================================================================
+
+def detect_prompt_domain(user_request: str) -> dict:
+    """
+    Detect the actual domain of the user request using keyword matching.
+    Returns the most likely domain with confidence score and matched keywords.
+    
+    This runs BEFORE category classification to filter out generic keywords.
+    
+    Args:
+        user_request: The user's material request
+        
+    Returns:
+        {
+            "domain": "battery_electrode" | "phosphate_recovery" | ... | "unknown",
+            "confidence": 0-100,
+            "matched_keywords": ["keyword1", "keyword2", ...],
+            "reason": "Explanation of domain detection"
+        }
+    """
+    request_lower = user_request.lower()
+    domain_scores = {}
+    domain_keywords_matched = {}
+    
+    # Score each domain based on keyword matches
+    for domain, domain_data in DOMAIN_KEYWORDS.items():
+        keywords = domain_data["keywords"]
+        min_keywords_required = domain_data["min_keywords"]
+        
+        matched = []
+        for keyword in keywords:
+            if keyword.lower() in request_lower:
+                matched.append(keyword)
+        
+        if len(matched) >= min_keywords_required:
+            # Score based on number of matched keywords
+            score = min(100, len(matched) * 15)  # Each keyword adds 15 points, cap at 100
+            domain_scores[domain] = score
+            domain_keywords_matched[domain] = matched
+    
+    # Find best match
+    if not domain_scores:
+        return {
+            "domain": "unknown",
+            "confidence": 0,
+            "matched_keywords": [],
+            "reason": "No domain keywords detected"
+        }
+    
+    best_domain = max(domain_scores, key=domain_scores.get)
+    best_score = domain_scores[best_domain]
+    best_keywords = domain_keywords_matched[best_domain]
+    
+    return {
+        "domain": best_domain,
+        "confidence": best_score,
+        "matched_keywords": best_keywords,
+        "reason": f"Detected {best_domain} domain with {len(best_keywords)} matching keywords"
+    }
+
+
+def validate_domain_category_alignment(prompt_domain: str, selected_category: str) -> dict:
+    """
+    Validate that the selected category matches the detected domain.
+    
+    Args:
+        prompt_domain: Domain detected from user request (e.g., "battery_electrode")
+        selected_category: Category selected by classification (e.g., "sodium_ion_battery_anode_composite")
+        
+    Returns:
+        {
+            "aligned": True/False,
+            "prompt_domain": "battery_electrode",
+            "category_domain": "battery_electrode",
+            "reason": "...",
+            "blocking_export": False or "Reason why export is blocked"
+        }
+    """
+    # If domain is unknown, allow it (no blocking)
+    if prompt_domain == "unknown":
+        return {
+            "aligned": True,
+            "prompt_domain": prompt_domain,
+            "category_domain": CATEGORY_TO_DOMAIN.get(selected_category, "unknown"),
+            "reason": "Unknown domain - allowing category selection",
+            "blocking_export": False
+        }
+    
+    # Get the domain for the selected category
+    category_domain = CATEGORY_TO_DOMAIN.get(selected_category, "unknown")
+    
+    # Check alignment
+    aligned = (prompt_domain == category_domain)
+    
+    if aligned:
+        return {
+            "aligned": True,
+            "prompt_domain": prompt_domain,
+            "category_domain": category_domain,
+            "reason": f"Domain and category aligned: {prompt_domain}",
+            "blocking_export": False
+        }
+    else:
+        return {
+            "aligned": False,
+            "prompt_domain": prompt_domain,
+            "category_domain": category_domain,
+            "reason": f"Domain mismatch: prompt is {prompt_domain} but category is {category_domain}",
+            "blocking_export": f"Cannot export: request appears to be about {prompt_domain}, but selected category is for {category_domain}"
+        }
+
 
 # ============================================================================
 # COMPOSITION VALIDATION SYSTEM (Global Rule)
@@ -2190,23 +2452,33 @@ def classify_material_hierarchically(user_request: str) -> dict:
     if any(kw in request_lower for kw in co2_keywords):
         preset_scores["co2_capture_material"] = 100
     
-    # Rule 4: OIL & GAS PRODUCED WATER → oil_gas_produced_water_pretreatment_media (BEFORE desalination_pretreatment_media)
+    # Rule 4: PHOSPHATE RECOVERY → phosphate_recovery_material (BEFORE oil/gas and other water treatment)
+    # Must run BEFORE oil/gas to prevent wastewater keywords from triggering oil/gas classification
+    phosphate_keywords = ["phosphate recovery", "phosphate ions", "orthophosphate", "phosphorus recovery",
+                         "nutrient recovery", "fertilizer reuse", "agricultural wastewater phosphate",
+                         "phosphate uptake", "phosphate adsorbent", "phosphate binding", "phosphate release"]
+    if any(kw in request_lower for kw in phosphate_keywords):
+        preset_scores["phosphate_recovery_material"] = 100
+    
+    # Rule 5: OIL & GAS PRODUCED WATER → oil_gas_produced_water_pretreatment_media (BEFORE desalination_pretreatment_media)
     oil_gas_keywords = ["produced water", "oil and gas", "oilfield", "oil and grease", "oil/grease",
                         "hydrocarbons", "hydrocarbon", "TOC", "COD", "sulfide", "reinjection",
                         "reuse", "ADNOC", "UAE oil", "gulf conditions", "hot gulf", "backwash",
                         "downstream membrane fouling", "produced-water", "oil production", "gas field", "reservoir"]
     if any(kw in request_lower for kw in oil_gas_keywords):
-        preset_scores["oil_gas_produced_water_pretreatment_media"] = 100
+        # Only set to 100 if phosphate recovery rule didn't already match
+        if "phosphate_recovery_material" not in preset_scores or preset_scores.get("phosphate_recovery_material") != 100:
+            preset_scores["oil_gas_produced_water_pretreatment_media"] = 100
     
-    # Rule 5: DESALINATION PRE-TREATMENT → desalination_pretreatment_media (BEFORE membrane)
+    # Rule 6: DESALINATION PRE-TREATMENT → desalination_pretreatment_media (BEFORE membrane)
     desal_keywords = ["desalination pre-treatment", "desalination pretreatment", "pre-treatment media",
                       "seawater treatment", "desal pre-treatment", "pretreatment media"]
     if any(kw in request_lower for kw in desal_keywords):
-        # Check if this is oil/gas produced water (more specific)
-        if "produced water" not in request_lower and not any(og in request_lower for og in oil_gas_keywords):
+        # Check if this is oil/gas produced water or phosphate recovery (more specific)
+        if "produced water" not in request_lower and not any(og in request_lower for og in oil_gas_keywords) and not any(phos in request_lower for phos in phosphate_keywords):
             preset_scores["desalination_pretreatment_media"] = 100
     
-    # Rule 6: SELF-CLEANING BUILDING COATING → self_cleaning_building_coating
+    # Rule 7: SELF-CLEANING BUILDING COATING → self_cleaning_building_coating
     self_clean_keywords = ["self-cleaning", "self cleaning", "exterior coating", "building coating",
                           "facade coating", "photocatalytic nanoparticles", "facade", "exterior"]
     if any(kw in request_lower for kw in self_clean_keywords):
@@ -2214,16 +2486,16 @@ def classify_material_hierarchically(user_request: str) -> dict:
         if not ("thermal" in request_lower and "insulation" in request_lower and "roof" not in request_lower):
             preset_scores["self_cleaning_building_coating"] = 100
     
-    # Rule 7: MEMBRANE WATER TREATMENT → membrane_water_treatment (unless heavy metals)
+    # Rule 8: MEMBRANE WATER TREATMENT → membrane_water_treatment (unless heavy metals)
     membrane_keywords = ["membrane", "anti-fouling", "polymer membrane", "pvdf", "pes", "filtration",
                         "microfiltration", "ultrafiltration", "nanofiltration", "mixed-matrix"]
     if any(kw in request_lower for kw in membrane_keywords):
-        # Check for heavy metal keywords
+        # Check for heavy metal keywords and other specific domains
         heavy_metal_keywords = ["heavy metal", "lead", "cadmium", "arsenic", "chromium"]
-        if not any(hm in request_lower for hm in heavy_metal_keywords):
+        if not any(hm in request_lower for hm in heavy_metal_keywords) and not any(og in request_lower for og in oil_gas_keywords) and not any(phos in request_lower for phos in phosphate_keywords):
             preset_scores["membrane_water_treatment"] = 100
     
-    # **CRITICAL RULE 8: BATTERY ELECTRODE DOMAIN GUARDRAIL** ← Must run BEFORE normal classification
+    # **CRITICAL RULE 9: BATTERY ELECTRODE DOMAIN GUARDRAIL** ← Must run BEFORE normal classification
     # This prevents misclassification of battery anodes as thermal insulation or other categories
     battery_electrode_keywords = [
         "sodium-ion battery", "na-ion", "battery anode", "anode composite", "hard carbon",
