@@ -1912,6 +1912,14 @@ if "show_result" in st.session_state and st.session_state.get("show_result"):
             st.markdown(f"**Status:** {s3['status'].upper()}")
             st.markdown(f"**Reason:** {s3['reason']}")
             
+            # Add scientific consistency warning
+            st.info("""
+**Scientific Consistency Note:** External dataset verification was not completed. This report relies on the internal category registry and preset library. 
+This does NOT mean the category is wrong; it means recommendations remain **planning-level until verified** against external datasets and laboratory results.
+
+All compositions, parameters, and processing methods are AI-generated defaults based on materials science knowledge and must be validated through rigorous experimental testing before any performance or safety claims can be made.
+            """)
+            
             # Stage 4: Scientific Dataset Verification
             if "stage_4_result" in three_stage_result:
                 s4 = three_stage_result["stage_4_result"]
