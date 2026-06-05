@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-06-05T00:04:34.023331",
+  "query": "Imidazole",
+  "data": {
+    "found": true,
+    "pubchem_cid": "795",
+    "compound_name": "Imidazole",
+    "molecular_formula": "C3H4N2",
+    "molecular_weight": 0.0,
+    "data_source": "PubChem",
+    "pubchem_url": "https://pubchem.ncbi.nlm.nih.gov/compound/795"
+  }
+}

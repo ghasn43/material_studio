@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-06-05T00:04:05.252961",
+  "query": "Activated Carbon",
+  "data": {
+    "found": true,
+    "pubchem_cid": "5462310",
+    "compound_name": "Activated Carbon",
+    "molecular_formula": "C",
+    "molecular_weight": 0.0,
+    "data_source": "PubChem",
+    "pubchem_url": "https://pubchem.ncbi.nlm.nih.gov/compound/5462310"
+  }
+}

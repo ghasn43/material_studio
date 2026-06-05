@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-06-05T00:04:29.859099",
+  "query": "Zinc",
+  "data": {
+    "found": true,
+    "query": "Zinc",
+    "data_source": "Wikidata",
+    "wikidata_url": "https://www.wikidata.org/"
+  }
+}

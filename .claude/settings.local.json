@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls /c/Python*/Scripts/streamlit*)",
+      "Bash(/c/Python*/Scripts/streamlit.exe --version)",
+      "Bash(/c/Python*/Scripts/streamlit --version)"
+    ]
+  }
+}

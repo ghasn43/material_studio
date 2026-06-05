@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-06-05T00:04:26.098076",
+  "query": "Zinc",
+  "data": {
+    "found": true,
+    "pubchem_cid": "23994",
+    "compound_name": "Zinc",
+    "molecular_formula": "Zn",
+    "molecular_weight": 0.0,
+    "data_source": "PubChem",
+    "pubchem_url": "https://pubchem.ncbi.nlm.nih.gov/compound/23994"
+  }
+}
