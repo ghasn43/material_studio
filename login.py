@@ -90,10 +90,6 @@ def show_login_page():
                         st.rerun()
                     else:
                         st.error(f"❌ Invalid credentials for {role} account")
-            
-            # Display demo credentials
-            st.info("📝 Demo Credentials:\n\n" +
-                   ("**Admin:** admin / admin123\n" if is_admin_login else "**User 1:** user1 / pass123\n**User 2:** user2 / demo456\n"))
         
         with tab2:
             st.markdown("### Create Account")
