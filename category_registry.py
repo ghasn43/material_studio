@@ -4298,8 +4298,15 @@ def validate_negative_keywords(material_data: dict, selected_category: str) -> d
     warnings = []
     
     # Check composition, validation plan, and processing method for contamination
+    processing_method_raw = material_data.get("processing_method")
+    # Handle both string and list formats for processing_method
+    if isinstance(processing_method_raw, list):
+        processing_method_str = " ".join(str(item) for item in processing_method_raw if item)
+    else:
+        processing_method_str = str(processing_method_raw or "")
+    
     text_fields = [
-        material_data.get("processing_method") or "",
+        processing_method_str,
         str(material_data.get("composition") or ""),
         str(material_data.get("validation_plan") or ""),
     ]
@@ -4370,7 +4377,12 @@ def perform_report_self_audit(material_data: dict, selected_category: str) -> di
     audit_result["items_checked"].append("validation_plan_match")
     
     # Check 3: Processing method belongs to category
-    processing_method = material_data.get("processing_method") or ""
+    processing_method_raw = material_data.get("processing_method")
+    # Handle both string and list formats
+    if isinstance(processing_method_raw, list):
+        processing_method = " ".join(str(item) for item in processing_method_raw if item)
+    else:
+        processing_method = str(processing_method_raw or "")
     expected_processing_keywords = preset.get("priority_keywords", [])[:5]
     method_keywords_found = sum(1 for keyword in expected_processing_keywords if keyword.lower() in processing_method.lower())
     if method_keywords_found < len(expected_processing_keywords) * 0.3:
