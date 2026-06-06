@@ -1,0 +1,98 @@
+[
+  {
+    "id": "phosphate_001",
+    "domain": "agriculture_nutrient",
+    "request": "We need a phosphate recovery material for municipal wastewater treatment. The material must selectively capture orthophosphate ions from secondary treated wastewater at pH 7.5-8.0, and then release the phosphate on regeneration for fertilizer reuse. Testing in batch and column experiments shows pH dependence and sensitivity to competing ions (Ca2+, Mg2+, Al3+). The material should achieve 90% phosphate uptake within 24 hours from synthetic wastewater with initial P concentration of 5 mg/L.",
+    "expected_domain": "agriculture_nutrient",
+    "expected_category": "phosphate_recovery_material",
+    "must_include_terms": ["phosphate recovery", "orthophosphate", "pH dependence", "competing ions", "fertilizer", "regeneration"],
+    "must_not_include_terms": ["electrode", "battery", "produced water", "oil", "roof", "fabric"],
+    "expected_sections": ["composition", "category_specific_parameters", "validation_plan"],
+    "forbidden_sections": ["battery parameters", "oil recovery parameters"],
+    "severity_if_failed": "critical"
+  },
+  {
+    "id": "phosphate_002",
+    "domain": "agriculture_nutrient",
+    "request": "Agricultural wastewater from fertilizer manufacturing contains high phosphate levels (50-200 mg/L). Design an adsorbent material using iron oxide nanoparticles and clay minerals to remove and recover phosphate for nutrient recycling. The material must work efficiently across pH 6-8, handle competing anions (NO3-, SO42-), and be regenerable with alkaline solution for at least 5 cycles without significant capacity loss.",
+    "expected_domain": "agriculture_nutrient",
+    "expected_category": "phosphate_recovery_material",
+    "must_include_terms": ["phosphate", "iron oxide", "clay", "nutrient recycling", "pH range", "regeneration", "anions"],
+    "must_not_include_terms": ["battery", "electrode", "oil", "produced water", "photocatalytic", "membrane"],
+    "expected_sections": ["composition", "validation_plan", "processing_method"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "phosphate_003",
+    "domain": "agriculture_nutrient",
+    "request": "Biochar-based phosphate adsorbent material for recovering phosphorus from agricultural runoff. The biochar is chemically modified with iron hydroxide and aluminum compounds to enhance phosphate uptake kinetics. Testing protocol includes: (1) kinetic studies with varying initial phosphate concentrations (1-20 mg/L), (2) isotherm analysis using Langmuir and Freundlich models, (3) pH optimization studies (4.0-9.0), and (4) competitive adsorption tests with Ca2+ and Mg2+ ions.",
+    "expected_domain": "agriculture_nutrient",
+    "expected_category": "phosphate_recovery_material",
+    "must_include_terms": ["phosphate", "biochar", "iron hydroxide", "aluminum", "kinetic", "isotherm", "pH optimization"],
+    "must_not_include_terms": ["battery", "electrode", "membrane", "produced water", "roof"],
+    "expected_sections": ["composition", "characterization_methods", "validation_plan"],
+    "forbidden_sections": ["electrochemical testing"],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "phosphate_004",
+    "domain": "agriculture_nutrient",
+    "request": "Hydroxyapatite-based composite for phosphate removal from wastewater treatment plant effluent. The hydroxyapatite is supported on activated carbon and modified with manganese oxide to improve adsorption kinetics. After phosphate saturation, the material can be thermally regenerated (400-500°C) to recover phosphate as usable fertilizer. Validation includes capacity measurements, regeneration efficiency testing, and trace metal leaching assessment.",
+    "expected_domain": "agriculture_nutrient",
+    "expected_category": "phosphate_recovery_material",
+    "must_include_terms": ["hydroxyapatite", "phosphate", "activated carbon", "manganese oxide", "regeneration", "fertilizer"],
+    "must_not_include_terms": ["battery", "electrode", "oil", "produced water", "thermal insulation"],
+    "expected_sections": ["composition", "validation_plan", "safety_tests"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "phosphate_005",
+    "domain": "agriculture_nutrient",
+    "request": "Zirconium-based phosphate sorbent for treating contaminated groundwater where agricultural fertilizer runoff has elevated phosphate levels (>5 mg/L P). The material combines zirconium hydroxide with silica gel for structural support. Key performance criteria: (1) achieve 95% phosphate removal from pH 5-8 test solutions, (2) minimal arsenic or uranium co-adsorption (selectivity testing), (3) regeneration with 0.1M NaOH, and (4) multiple use cycles.",
+    "expected_domain": "agriculture_nutrient",
+    "expected_category": "phosphate_recovery_material",
+    "must_include_terms": ["phosphate", "zirconium", "groundwater", "agricultural", "pH range", "selectivity", "regeneration"],
+    "must_not_include_terms": ["battery", "electrode", "oil", "membrane filtration", "photocatalytic"],
+    "expected_sections": ["composition", "validation_plan", "characterization_methods"],
+    "forbidden_sections": ["electrochemical characterization"],
+    "severity_if_failed": "medium"
+  },
+  {
+    "id": "phosphate_006",
+    "domain": "agriculture_nutrient",
+    "request": "Nutrient recovery from dairy manure digestate using a phosphate-selective binding material. The composite contains modified montmorillonite clay with aluminum oxide coating. Testing includes: batch kinetics studies, pH-dependent adsorption across pH 6-9, desorption studies with phosphoric acid solutions, and agronomic trials evaluating recovered phosphate as slow-release fertilizer.",
+    "expected_domain": "agriculture_nutrient",
+    "expected_category": "phosphate_recovery_material",
+    "must_include_terms": ["nutrient recovery", "phosphate", "montmorillonite", "aluminum oxide", "fertilizer", "digestate"],
+    "must_not_include_terms": ["battery", "electrode", "oil", "produced water", "coating", "roof"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  },
+  {
+    "id": "phosphate_007",
+    "domain": "agriculture_nutrient",
+    "request": "Lab-scale synthesis of iron oxide-doped polyamine resin for phosphate adsorption from synthetic wastewater. The resin is designed for pH 7.0 operation with capacity targets of 30-50 mg P/g sorbent. Validation testing includes static capacity measurements, kinetic column breakthrough studies, pH edge testing (pH 4-9), and reversibility assessments after caustic regeneration (1M NaOH).",
+    "expected_domain": "agriculture_nutrient",
+    "expected_category": "phosphate_recovery_material",
+    "must_include_terms": ["iron oxide", "phosphate", "polyamine resin", "adsorption", "pH", "breakthrough", "regeneration"],
+    "must_not_include_terms": ["battery", "electrode", "oil recovery", "membrane", "photocatalytic"],
+    "expected_sections": ["composition", "validation_plan", "characterization_methods"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  },
+  {
+    "id": "phosphate_008",
+    "domain": "agriculture_nutrient",
+    "request": "Hybrid adsorbent combining magnetic iron oxide nanoparticles with chitosan for phosphate recovery from agricultural wastewater. The material enables magnetic separation for ease of recovery. Testing includes: magnetization measurements, phosphate binding kinetics, selectivity against competing anions, thermal regeneration protocols, and multi-cycle performance.",
+    "expected_domain": "agriculture_nutrient",
+    "expected_category": "phosphate_recovery_material",
+    "must_include_terms": ["phosphate", "iron oxide nanoparticles", "magnetic", "chitosan", "agricultural", "recovery"],
+    "must_not_include_terms": ["battery", "electrode", "oil", "produced water", "roof"],
+    "expected_sections": ["composition", "validation_plan", "characterization_methods"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  }
+]

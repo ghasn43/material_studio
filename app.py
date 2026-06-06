@@ -58,6 +58,14 @@ from category_registry import (
     clean_composition_components,  # NEW: remove substrate/environment items from composition
     detect_prompt_domain,  # NEW: detect domain from user request
     validate_domain_category_alignment,  # NEW: validate domain-category alignment
+    # Domain-first classification functions (NEW)
+    get_available_domains,
+    get_categories_for_domain,
+    classify_within_domain,
+    validate_domain_category_match,
+    check_forbidden_cross_domain_keywords,
+    validate_negative_keywords,
+    perform_report_self_audit,
 )
 
 # Import scientific dataset verification
@@ -433,7 +441,7 @@ load_dotenv()
 # Fall back to environment variables (for local development)
 try:
     ANTHROPIC_API_KEY = st.secrets.get("ANTHROPIC_API_KEY")
-except (AttributeError, KeyError):
+except (AttributeError, KeyError, Exception):
     ANTHROPIC_API_KEY = None
 
 # If not in Streamlit Secrets, try environment variables
@@ -1423,20 +1431,16 @@ targets, and validation protocols.
 
 # Check API key
 if not validate_api_key():
-    st.error(
-        "❌ **Anthropic API Key Not Found**\n\n"
-        "**For Streamlit Cloud:**\n"
-        "1. Go to your app settings (gear icon)\n"
-        "2. Click 'Secrets'\n"
-        "3. Add: `ANTHROPIC_API_KEY=your-api-key-here`\n"
-        "4. Redeploy the app\n\n"
+    st.warning(
+        "⚠️ **Anthropic API Key Not Configured**\n\n"
+        "The app will still display the domain selection and input forms for testing. "
+        "However, analysis and PDF generation will not work until you add an API key.\n\n"
         "**For Local Development:**\n"
         "1. Create a `.env` file in the app directory\n"
         "2. Add: `ANTHROPIC_API_KEY=your-api-key-here`\n"
         "3. Restart the app\n\n"
         "Get your API key from https://console.anthropic.com"
     )
-    st.stop()
 
 # Initialize auto-category session state
 init_auto_category_session()
@@ -1492,6 +1496,39 @@ with st.sidebar:
     # Add auto-category toggle
     enable_auto_category = add_auto_category_sidebar_toggle()
 
+# ============================================================================
+# DOMAIN-FIRST MATERIAL CLASSIFICATION
+# ============================================================================
+
+st.markdown("### 🎯 Select Material Domain (Optional)")
+st.caption("Choose a domain to restrict category selection. Leave blank for auto-detection across all categories.")
+
+# Get available domains
+available_domains = get_available_domains()
+domain_options = {domain_info["display_name"]: domain_key for domain_key, domain_info in available_domains.items()}
+
+# Add "Auto-detect" option
+domain_options = {"🤖 Auto-Detect All Domains": "auto_detect", **domain_options}
+
+selected_domain_display = st.selectbox(
+    label="Material Domain",
+    options=list(domain_options.keys()),
+    index=0,
+    key="selected_domain_display",
+    help="Select the material domain to restrict category options to relevant categories only"
+)
+
+selected_domain = domain_options[selected_domain_display]
+
+# Show allowed categories for selected domain if not auto-detect
+if selected_domain != "auto_detect":
+    st.session_state['selected_domain'] = selected_domain
+    allowed_cats = get_categories_for_domain(selected_domain)
+    if allowed_cats:
+        st.info(f"✅ Allowed categories in this domain: {', '.join([c['display_name'] for c in allowed_cats])}")
+else:
+    st.session_state['selected_domain'] = None
+
 # Input section
 st.markdown("### 📝 Material or Coating Request")
 
@@ -1512,16 +1549,47 @@ if analyze_button:
     if not user_prompt.strip():
         st.warning("⚠️ Please enter a material description before analyzing.")
     else:
+        from category_registry import (
+            classify_within_domain, 
+            check_forbidden_cross_domain_keywords,
+            DOMAIN_DEFINITIONS
+        )
+        
         with st.spinner("🤖 Claude is analyzing your request..."):
+            # Check for domain restrictions
+            selected_domain_value = st.session_state.get('selected_domain')
+            
+            # Show domain warnings if cross-domain keywords detected
+            if selected_domain_value and selected_domain_value != "auto_detect":
+                domain_check = check_forbidden_cross_domain_keywords(
+                    user_prompt, 
+                    selected_domain_value, 
+                    DOMAIN_DEFINITIONS[selected_domain_value]["allowed_categories"][0]
+                )
+                if domain_check.get("has_cross_domain_contamination"):
+                    st.warning(f"⚠️ {domain_check['warning']}")
+            
             api_result = call_claude(user_prompt)
             
-            # Store user prompt always (for retry and fallback)
+            # Store user prompt and domain selection
             st.session_state['user_prompt'] = user_prompt
+            st.session_state['request_domain'] = selected_domain_value
             
             if api_result.get("success"):
                 # API call succeeded
                 ai_data = api_result["data"]
                 enriched = enrich_with_preset(user_prompt, ai_data)
+                
+                # Apply domain-first classification if domain selected
+                if selected_domain_value and selected_domain_value != "auto_detect":
+                    domain_classification = classify_within_domain(user_prompt, selected_domain_value)
+                    if domain_classification.get("success"):
+                        # Override category with domain-restricted classification
+                        enriched['material_category'] = domain_classification['category']
+                        enriched['material_category_display'] = domain_classification['category_display']
+                        enriched['domain_restricted'] = True
+                        enriched['domain'] = selected_domain_value
+                
                 st.session_state['result'] = enriched
                 st.session_state['show_result'] = True
                 st.session_state['api_error'] = None
@@ -1578,6 +1646,40 @@ if "show_result" in st.session_state and st.session_state.get("show_result"):
         st.info("📋 **Local Preset Report** - Generated from category defaults. To get AI-enhanced analysis, use 'Retry AI Generation' when service is available.")
     
     st.markdown("### 📊 Analysis Results")
+    
+    # ===== DOMAIN CONFIRMATION PANEL (NEW - DOMAIN-FIRST ARCHITECTURE) =====
+    from category_registry import validate_domain_category_match, DOMAIN_DEFINITIONS
+    
+    request_domain = st.session_state.get('request_domain')
+    material_category = result.get("material_category", "other_material")
+    
+    if request_domain and request_domain != "auto_detect":
+        # Domain was explicitly selected by user
+        domain_validation = validate_domain_category_match(request_domain, material_category)
+        domain_display_name = DOMAIN_DEFINITIONS[request_domain]["display_name"]
+        
+        st.markdown("#### 🎯 Domain & Category Confirmation")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if domain_validation.get("is_valid"):
+                st.success(f"✅ **Domain:** {domain_display_name}\n**Category:** {result.get('material_category_display', material_category)}")
+            else:
+                st.warning(f"⚠️ Category mismatch!\n**Selected Domain:** {domain_display_name}\n**Detected Category:** {result.get('material_category_display', material_category)}")
+                st.warning("This category is not allowed in the selected domain. You can either:\n1. Change the category within the domain\n2. Switch to a different domain")
+        
+        with col2:
+            # Show option to change domain
+            if st.button("📋 Change Domain", use_container_width=True, key="change_domain_btn"):
+                st.session_state['selected_domain'] = None
+                st.rerun()
+    else:
+        # Auto-detect mode
+        st.markdown("#### 🤖 Auto-Detected Category")
+        st.info(f"**Category:** {result.get('material_category_display', material_category)}\n(No domain restriction applied)")
+    
+    st.markdown("---")
+    # ===== END DOMAIN CONFIRMATION PANEL =====
     
     # Get hierarchical classification for reasoning
     hier_classification = detect_material_category(user_prompt)
@@ -2195,18 +2297,37 @@ All compositions, parameters, and processing methods are AI-generated defaults b
     conflict_check = detect_category_conflicts(user_prompt, material_category)
     
     # Check domain-category alignment (NEW DOMAIN-FIRST VALIDATION)
+    from category_registry import validate_domain_category_match, perform_report_self_audit
+    
     domain_alignment = result.get("domain_alignment", {})
     blocked_by_domain_mismatch = False
     domain_mismatch_reason = ""
     
-    if not domain_alignment.get("aligned", True) and domain_alignment.get("prompt_domain") != "unknown":
-        # Only block if domain is known (not "unknown") and doesn't align
-        blocked_by_domain_mismatch = True
-        domain_mismatch_reason = domain_alignment.get("blocking_export", "Domain and category do not match")
+    # ENHANCED: Check explicit domain selection
+    request_domain = st.session_state.get('request_domain')
+    if request_domain and request_domain != "auto_detect":
+        domain_validation = validate_domain_category_match(request_domain, material_category)
+        if not domain_validation.get("is_valid"):
+            blocked_by_domain_mismatch = True
+            domain_mismatch_reason = f"Category '{result.get('material_category_display', material_category)}' is not allowed in the selected domain. Select a different category or domain."
+    
+    # Also check auto-detected domain alignment
+    if not blocked_by_domain_mismatch:
+        if not domain_alignment.get("aligned", True) and domain_alignment.get("prompt_domain") != "unknown":
+            blocked_by_domain_mismatch = True
+            domain_mismatch_reason = domain_alignment.get("blocking_export", "Domain and category do not match")
     
     # Also check old conflict detection for backward compatibility
     old_blocked = conflict_check.get("blocked_export", False)
     blocked_by_domain_mismatch = blocked_by_domain_mismatch or old_blocked
+    
+    # ENHANCED: Run report self-audit before allowing export
+    report_audit = perform_report_self_audit(result, material_category)
+    audit_failed = not report_audit.get("audit_passed", True)
+    if audit_failed:
+        blocked_by_domain_mismatch = True
+        audit_issues = "\n".join([f"❌ {issue}" for issue in report_audit.get("issues", [])])
+        domain_mismatch_reason = f"Report audit failed:\n{audit_issues}"
     
     # Export button logic
     can_export = three_stage_result["overall_status"] != "fail" and not processing_method_incomplete and not blocked_by_domain_mismatch

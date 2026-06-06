@@ -168,6 +168,204 @@ CATEGORY_TO_DOMAIN = {
 }
 
 # ============================================================================
+# DOMAIN-FIRST ARCHITECTURE: Domain Definitions and Category Restrictions
+# ============================================================================
+# This enforces domain-specific category restrictions to prevent cross-domain contamination
+
+DOMAIN_DEFINITIONS = {
+    "water_wastewater": {
+        "display_name": "Water & Wastewater Materials",
+        "description": "Materials for water treatment, wastewater purification, and water reuse",
+        "allowed_categories": [
+            "membrane_water_treatment",
+            "photocatalytic_coating",
+            "adsorbent_heavy_metals",
+            "desalination_pretreatment_media",
+        ],
+        "forbidden_keywords": ["battery", "electrode", "anode", "cathode", "phosphate recovery", "oil and gas", "roof", "fabric", "stain"],
+    },
+    
+    "oil_gas_water": {
+        "display_name": "Oil & Gas Produced-Water Materials",
+        "description": "Materials for oil and gas wastewater treatment, produced water purification",
+        "allowed_categories": [
+            "oil_gas_produced_water_pretreatment_media",
+        ],
+        "forbidden_keywords": ["battery", "phosphate", "roof", "fabric", "stain", "capture", "desalination"],
+    },
+    
+    "carbon_capture_materials": {
+        "display_name": "Carbon Capture Materials",
+        "description": "Materials for CO₂ capture and carbon sequestration",
+        "allowed_categories": [
+            "co2_capture_material",
+        ],
+        "forbidden_keywords": ["battery", "phosphate", "produced water", "roof", "fabric", "textile", "thermal insulation", "electrode"],
+    },
+    
+    "battery_electrochemical": {
+        "display_name": "Battery & Electrochemical Materials",
+        "description": "Materials for battery electrodes, supercapacitors, and electrochemical energy storage",
+        "allowed_categories": [
+            "sodium_ion_battery_anode_composite",
+        ],
+        "forbidden_keywords": ["water treatment", "phosphate", "roof", "fabric", "stain", "thermal insulation", "membrane"],
+    },
+    
+    "agriculture_nutrient": {
+        "display_name": "Agriculture & Nutrient Recovery Materials",
+        "description": "Materials for phosphate recovery, nutrient cycling, and agricultural applications",
+        "allowed_categories": [
+            "phosphate_recovery_material",
+        ],
+        "forbidden_keywords": ["battery", "electrode", "oil and gas", "produced water", "roof", "fabric", "water treatment", "membrane"],
+    },
+    
+    "coatings_construction": {
+        "display_name": "Coatings & Construction Materials",
+        "description": "Materials for roof coatings, building protection, weatherproofing",
+        "allowed_categories": [
+            "roof_waterproofing_thermal_insulation_coating",
+            "thermal_insulation_composite",
+            "self_cleaning_building_coating",
+        ],
+        "forbidden_keywords": ["battery", "phosphate", "produced water", "water treatment", "fabric", "stain"],
+    },
+    
+    "atmospheric_water": {
+        "display_name": "Atmospheric Water Harvesting Materials",
+        "description": "Materials for moisture capture and atmospheric water harvesting",
+        "allowed_categories": [
+            "atmospheric_water_harvesting_material",
+        ],
+        "forbidden_keywords": ["battery", "phosphate", "produced water", "roof", "fabric", "electrode"],
+    },
+    
+    "textile_cleaning": {
+        "display_name": "Textile & Consumer Cleaning Materials",
+        "description": "Materials for fabric stain removal, textile cleaning, laundry applications",
+        "allowed_categories": [
+            "fabric_oil_stain_removal_composite",
+        ],
+        "forbidden_keywords": ["battery", "phosphate", "produced water", "water treatment", "roof", "electrode"],
+    },
+    
+    "membrane_materials": {
+        "display_name": "Membrane Materials",
+        "description": "Advanced membrane materials for separation, filtration, and purification",
+        "allowed_categories": [
+            "membrane_water_treatment",
+        ],
+        "forbidden_keywords": ["battery", "phosphate", "roof", "fabric", "stain"],
+    },
+    
+    "general_explorer": {
+        "display_name": "General Explorer Mode",
+        "description": "For materials that don't fit specialized domains or experimental materials",
+        "allowed_categories": [
+            "other_material",
+        ],
+        "forbidden_keywords": [],
+    },
+}
+
+# Reverse mapping: category -> domain
+CATEGORY_TO_DOMAIN_SPECIFIC = {}
+for domain_key, domain_info in DOMAIN_DEFINITIONS.items():
+    for category in domain_info["allowed_categories"]:
+        CATEGORY_TO_DOMAIN_SPECIFIC[category] = domain_key
+
+# ============================================================================
+# NEGATIVE KEYWORD RULES: Prevent Cross-Domain Contamination
+# ============================================================================
+
+NEGATIVE_KEYWORD_RULES = {
+    "membrane_water_treatment": {
+        "must_include_keywords": ["membrane", "filtration", "water flux", "rejection"],
+        "weak_generic_keywords": ["porous", "water", "filter", "separation"],
+        "forbidden_cross_domain_keywords": ["anode", "cathode", "electrode", "phosphate recovery", "roof", "fabric", "thermal"],
+    },
+    
+    "photocatalytic_coating": {
+        "must_include_keywords": ["photocatalytic", "TiO2", "light-driven", "water treatment"],
+        "weak_generic_keywords": ["coating", "nanoparticles", "degradation"],
+        "forbidden_cross_domain_keywords": ["battery", "electrode", "phosphate", "roof", "fabric", "thermal"],
+    },
+    
+    "adsorbent_heavy_metals": {
+        "must_include_keywords": ["heavy metal", "adsorption", "lead", "cadmium", "arsenic"],
+        "weak_generic_keywords": ["adsorbent", "removal", "contamination"],
+        "forbidden_cross_domain_keywords": ["battery", "electrode", "phosphate", "roof", "fabric", "produced water"],
+    },
+    
+    "desalination_pretreatment_media": {
+        "must_include_keywords": ["desalination", "pretreatment", "seawater"],
+        "weak_generic_keywords": ["water", "treatment", "salt"],
+        "forbidden_cross_domain_keywords": ["battery", "phosphate", "roof", "fabric", "electrode"],
+    },
+    
+    "oil_gas_produced_water_pretreatment_media": {
+        "must_include_keywords": ["produced water", "oil and gas", "hydrocarbon", "ADNOC"],
+        "weak_generic_keywords": ["water", "treatment", "removal"],
+        "forbidden_cross_domain_keywords": ["battery", "phosphate", "roof", "fabric", "thermal", "electrode"],
+    },
+    
+    "sodium_ion_battery_anode_composite": {
+        "must_include_keywords": ["battery", "sodium-ion", "anode", "electrode", "Na+"],
+        "weak_generic_keywords": ["carbon", "binder", "composite"],
+        "forbidden_cross_domain_keywords": ["phosphate", "roof", "fabric", "water treatment", "produced water", "thermal"],
+    },
+    
+    "phosphate_recovery_material": {
+        "must_include_keywords": ["phosphate", "nutrient recovery", "phosphorus", "agricultural"],
+        "weak_generic_keywords": ["recovery", "adsorption", "removal"],
+        "forbidden_cross_domain_keywords": ["battery", "roof", "fabric", "water treatment", "electrode"],
+    },
+    
+    "roof_waterproofing_thermal_insulation_coating": {
+        "must_include_keywords": ["roof", "waterproofing", "coating", "building"],
+        "weak_generic_keywords": ["coating", "water", "thermal"],
+        "forbidden_cross_domain_keywords": ["battery", "phosphate", "water treatment", "fabric", "electrode"],
+    },
+    
+    "thermal_insulation_composite": {
+        "must_include_keywords": ["thermal insulation", "thermal conductivity", "heat resistance"],
+        "weak_generic_keywords": ["insulation", "thermal", "temperature"],
+        "forbidden_cross_domain_keywords": ["battery", "phosphate", "water treatment", "fabric", "electrode"],
+    },
+    
+    "self_cleaning_building_coating": {
+        "must_include_keywords": ["self-cleaning", "facade", "photocatalytic", "building"],
+        "weak_generic_keywords": ["coating", "surface", "nanoparticles"],
+        "forbidden_cross_domain_keywords": ["battery", "phosphate", "water treatment", "fabric", "electrode"],
+    },
+    
+    "atmospheric_water_harvesting_material": {
+        "must_include_keywords": ["atmospheric water", "harvesting", "desiccant", "hygroscopic"],
+        "weak_generic_keywords": ["water", "moisture", "capture"],
+        "forbidden_cross_domain_keywords": ["battery", "phosphate", "roof", "fabric", "electrode"],
+    },
+    
+    "fabric_oil_stain_removal_composite": {
+        "must_include_keywords": ["fabric", "textile", "stain removal", "laundry"],
+        "weak_generic_keywords": ["stain", "cleaning", "removal"],
+        "forbidden_cross_domain_keywords": ["battery", "phosphate", "water treatment", "roof", "electrode"],
+    },
+    
+    "co2_capture_material": {
+        "must_include_keywords": ["CO2 capture", "carbon capture", "amine", "regeneration"],
+        "weak_generic_keywords": ["capture", "carbon", "absorption"],
+        "forbidden_cross_domain_keywords": ["battery", "phosphate", "roof", "fabric", "water treatment"],
+    },
+    
+    "potassium_brine_separation_material": {
+        "must_include_keywords": ["potassium", "brine", "separation", "KCl"],
+        "weak_generic_keywords": ["recovery", "separation", "salt"],
+        "forbidden_cross_domain_keywords": ["battery", "phosphate", "roof", "fabric", "water treatment"],
+    },
+}
+
+# ============================================================================
 # CENTRAL CATEGORY REGISTRY (Single Source of Truth)
 # ============================================================================
 
@@ -3929,3 +4127,276 @@ def get_category_info(category_name: str) -> dict:
         "parameter_count": len(preset.get("category_specific_parameters", {})),
         "validation_item_count": len(preset.get("validation_plan", {})),
     }
+
+
+# ============================================================================
+# DOMAIN-FIRST CLASSIFICATION FUNCTIONS
+# ============================================================================
+
+def get_available_domains() -> dict:
+    """Return all available domains with their metadata."""
+    return {
+        domain_key: {
+            "key": domain_key,
+            "display_name": DOMAIN_DEFINITIONS[domain_key]["display_name"],
+            "description": DOMAIN_DEFINITIONS[domain_key]["description"],
+            "category_count": len(DOMAIN_DEFINITIONS[domain_key]["allowed_categories"]),
+        }
+        for domain_key in DOMAIN_DEFINITIONS.keys()
+    }
+
+
+def get_categories_for_domain(domain_key: str) -> list:
+    """Get all allowed categories for a specific domain."""
+    if domain_key not in DOMAIN_DEFINITIONS:
+        return []
+    
+    allowed_cats = DOMAIN_DEFINITIONS[domain_key]["allowed_categories"]
+    return [
+        {
+            "key": cat,
+            "display_name": CATEGORY_REGISTRY.get(cat, {}).get("display_name", cat),
+            "priority": CATEGORY_REGISTRY.get(cat, {}).get("priority", 999),
+        }
+        for cat in allowed_cats
+        if cat in CATEGORY_REGISTRY
+    ]
+
+
+def classify_within_domain(user_request: str, selected_domain: str) -> dict:
+    """
+    Classify material category ONLY within the selected domain.
+    
+    Args:
+        user_request: The user's material description
+        selected_domain: The selected domain (e.g., 'battery_electrochemical')
+        
+    Returns:
+        Classification result with category, confidence, and reasoning
+    """
+    if selected_domain not in DOMAIN_DEFINITIONS:
+        return {
+            "success": False,
+            "error": f"Unknown domain: {selected_domain}",
+            "category": None,
+            "confidence": 0
+        }
+    
+    allowed_categories = DOMAIN_DEFINITIONS[selected_domain]["allowed_categories"]
+    
+    # Classify using full classifier first
+    full_classification = classify_material_category(user_request)
+    suggested_category = full_classification[0] if full_classification else "other_material"
+    
+    # Check if suggested category is in allowed domain
+    if suggested_category in allowed_categories:
+        return {
+            "success": True,
+            "category": suggested_category,
+            "domain": selected_domain,
+            "category_display": CATEGORY_REGISTRY.get(suggested_category, {}).get("display_name", suggested_category),
+            "confidence": full_classification[1] if len(full_classification) > 1 else 0.5,
+            "restricted_to_domain": True,
+            "message": f"Classification confirmed within {DOMAIN_DEFINITIONS[selected_domain]['display_name']}"
+        }
+    else:
+        # Category falls outside domain, default to first allowed category
+        default_category = allowed_categories[0] if allowed_categories else "other_material"
+        return {
+            "success": True,
+            "category": default_category,
+            "domain": selected_domain,
+            "category_display": CATEGORY_REGISTRY.get(default_category, {}).get("display_name", default_category),
+            "confidence": 0.3,
+            "restricted_to_domain": True,
+            "message": f"Classification restricted to domain: {DOMAIN_DEFINITIONS[selected_domain]['display_name']}. Using default category: {CATEGORY_REGISTRY.get(default_category, {}).get('display_name', default_category)}"
+        }
+
+
+def validate_domain_category_match(selected_domain: str, selected_category: str) -> dict:
+    """
+    Verify that the selected category belongs to the selected domain.
+    
+    Args:
+        selected_domain: The selected domain
+        selected_category: The selected category
+        
+    Returns:
+        Validation result with match status and details
+    """
+    if selected_domain not in DOMAIN_DEFINITIONS:
+        return {"is_valid": False, "error": f"Unknown domain: {selected_domain}"}
+    
+    allowed_categories = DOMAIN_DEFINITIONS[selected_domain]["allowed_categories"]
+    
+    if selected_category not in allowed_categories:
+        return {
+            "is_valid": False,
+            "error": f"Category '{selected_category}' not allowed in domain '{selected_domain}'",
+            "selected_domain": selected_domain,
+            "selected_category": selected_category,
+            "allowed_categories": allowed_categories,
+        }
+    
+    return {
+        "is_valid": True,
+        "domain": selected_domain,
+        "category": selected_category,
+        "message": f"✅ Category matches domain"
+    }
+
+
+def check_forbidden_cross_domain_keywords(user_request: str, selected_domain: str, selected_category: str) -> dict:
+    """
+    Check if the request contains forbidden keywords from other domains.
+    
+    Args:
+        user_request: The user's material description
+        selected_domain: The selected domain
+        selected_category: The selected category
+        
+    Returns:
+        Dictionary with warnings about cross-domain keyword contamination
+    """
+    forbidden_keywords = DOMAIN_DEFINITIONS[selected_domain].get("forbidden_keywords", [])
+    request_lower = user_request.lower()
+    
+    found_forbidden = []
+    for keyword in forbidden_keywords:
+        if keyword.lower() in request_lower:
+            found_forbidden.append(keyword)
+    
+    if found_forbidden:
+        return {
+            "has_cross_domain_contamination": True,
+            "forbidden_keywords_found": found_forbidden,
+            "warning": f"⚠️ Request contains keywords from other domains: {', '.join(found_forbidden)}. Please confirm your domain selection."
+        }
+    
+    return {
+        "has_cross_domain_contamination": False,
+        "message": "✅ No cross-domain keyword contamination detected"
+    }
+
+
+def validate_negative_keywords(material_data: dict, selected_category: str) -> dict:
+    """
+    Validate material data against negative keyword rules for the category.
+    
+    Args:
+        material_data: The material analysis result
+        selected_category: The selected category
+        
+    Returns:
+        Validation result with issues and recommendations
+    """
+    if selected_category not in NEGATIVE_KEYWORD_RULES:
+        return {"is_valid": True, "message": "No negative keyword rules defined for category"}
+    
+    rules = NEGATIVE_KEYWORD_RULES[selected_category]
+    issues = []
+    warnings = []
+    
+    # Check composition, validation plan, and processing method for contamination
+    text_fields = [
+        material_data.get("processing_method", ""),
+        str(material_data.get("composition", "")),
+        str(material_data.get("validation_plan", "")),
+    ]
+    combined_text = " ".join(text_fields).lower()
+    
+    # Check for forbidden cross-domain keywords
+    for forbidden in rules.get("forbidden_cross_domain_keywords", []):
+        if forbidden.lower() in combined_text:
+            issues.append(f"❌ Forbidden cross-domain keyword detected: '{forbidden}' (suggests contamination from another domain)")
+    
+    # Check for must-include keywords
+    must_includes = rules.get("must_include_keywords", [])
+    found_must_includes = sum(1 for keyword in must_includes if keyword.lower() in combined_text)
+    if found_must_includes < len(must_includes) / 2:
+        warnings.append(f"⚠️ Only {found_must_includes}/{len(must_includes)} characteristic keywords found. Category may be misclassified.")
+    
+    return {
+        "is_valid": len(issues) == 0,
+        "issues": issues,
+        "warnings": warnings,
+        "must_include_found": found_must_includes,
+        "must_include_total": len(must_includes),
+    }
+
+
+def perform_report_self_audit(material_data: dict, selected_category: str) -> dict:
+    """
+    Self-audit the generated report before export to verify domain consistency.
+    
+    Args:
+        material_data: The complete material analysis result
+        selected_category: The selected category
+        
+    Returns:
+        Audit result with pass/fail and issues found
+    """
+    audit_result = {
+        "audit_passed": True,
+        "issues": [],
+        "warnings": [],
+        "category": selected_category,
+        "items_checked": []
+    }
+    
+    # Get the category preset
+    preset = get_category_preset(selected_category)
+    if not preset:
+        audit_result["audit_passed"] = False
+        audit_result["issues"].append(f"Category preset not found: {selected_category}")
+        return audit_result
+    
+    # Check 1: Composition belongs to category
+    composition = material_data.get("composition", [])
+    expected_components = [c.get("component", "").lower() for c in preset.get("default_composition", [])]
+    actual_components = [c.get("component", "").lower() for c in composition]
+    
+    component_match = sum(1 for exp in expected_components for act in actual_components if exp in act or act in exp)
+    if component_match < len(expected_components) * 0.5:
+        audit_result["warnings"].append(f"⚠️ Composition doesn't match category preset ({component_match}/{len(expected_components)} components found)")
+    audit_result["items_checked"].append("composition_match")
+    
+    # Check 2: Validation plan belongs to category
+    expected_validations = set(preset.get("validation_plan", {}).keys())
+    actual_validations = set(material_data.get("validation_plan", {}).keys())
+    validation_match = len(expected_validations & actual_validations)
+    if validation_match < len(expected_validations) * 0.5:
+        audit_result["warnings"].append(f"⚠️ Validation plan doesn't match category ({validation_match}/{len(expected_validations)} items found)")
+    audit_result["items_checked"].append("validation_plan_match")
+    
+    # Check 3: Processing method belongs to category
+    processing_method = material_data.get("processing_method", "")
+    expected_processing_keywords = preset.get("priority_keywords", [])[:5]
+    method_keywords_found = sum(1 for keyword in expected_processing_keywords if keyword.lower() in processing_method.lower())
+    if method_keywords_found < len(expected_processing_keywords) * 0.3:
+        audit_result["warnings"].append(f"⚠️ Processing method has few category-specific keywords ({method_keywords_found}/{len(expected_processing_keywords)})")
+    audit_result["items_checked"].append("processing_method_match")
+    
+    # Check 4: Negative keyword validation
+    negative_check = validate_negative_keywords(material_data, selected_category)
+    if not negative_check["is_valid"]:
+        audit_result["audit_passed"] = False
+        audit_result["issues"].extend(negative_check["issues"])
+    audit_result["items_checked"].append("negative_keywords")
+    
+    # Check 5: No forbidden domain terms in disclaimer
+    disclaimer = material_data.get("category_disclaimer", "").lower()
+    category_domain = CATEGORY_TO_DOMAIN_SPECIFIC.get(selected_category, "unknown")
+    if category_domain in DOMAIN_DEFINITIONS:
+        forbidden_terms = DOMAIN_DEFINITIONS[category_domain].get("forbidden_keywords", [])
+        found_forbidden_in_disclaimer = [term for term in forbidden_terms if term.lower() in disclaimer]
+        if found_forbidden_in_disclaimer:
+            audit_result["warnings"].append(f"⚠️ Disclaimer contains forbidden cross-domain terms: {', '.join(found_forbidden_in_disclaimer)}")
+    audit_result["items_checked"].append("disclaimer_cross_domain")
+    
+    # Summary
+    audit_result["summary"] = f"Audit checked {len(audit_result['items_checked'])} items: " + \
+                             f"{'✅ PASSED' if audit_result['audit_passed'] else '❌ FAILED'} " + \
+                             f"({len(audit_result['warnings'])} warnings, {len(audit_result['issues'])} issues)"
+    
+    return audit_result

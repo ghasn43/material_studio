@@ -1,0 +1,98 @@
+[
+  {
+    "id": "co2_001",
+    "domain": "carbon_capture_materials",
+    "request": "Amine-functionalized sorbent for direct air capture (DAC) from atmospheric CO₂ (410 ppm). The material combines mesoporous silica with polyethylenimine (PEI) and polyethylene glycol (PEG) additives. Operational targets: (1) CO₂ capture capacity >3 mol CO₂/kg sorbent at standard air, (2) fast kinetics for low humidity operation, (3) regeneration at 80-100°C requiring <1.5 MJ/kg energy, and (4) 1000+ cycle stability.",
+    "expected_domain": "carbon_capture_materials",
+    "expected_category": "co2_capture_material",
+    "must_include_terms": ["CO2 capture", "amine", "direct air capture", "regeneration", "sorbent", "capture capacity"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "produced water", "fabric"],
+    "expected_sections": ["composition", "category_specific_parameters", "validation_plan"],
+    "forbidden_sections": ["electrochemical parameters"],
+    "severity_if_failed": "critical"
+  },
+  {
+    "id": "co2_002",
+    "domain": "carbon_capture_materials",
+    "request": "Carbon capture sorbent for flue gas application (5-15% CO₂ from coal power plant). The material uses activated carbon impregnated with alkali metal oxides (K2CO3, Na2CO3) for CO₂ chemisorption. Specifications: (1) achieve 90% CO₂/N₂ selectivity at 60°C and 1 bar, (2) fast breakthrough (10 min at 5 L/min), (3) thermal regeneration at 150-200°C with >95% capacity recovery, and (4) durability for 500+ cycles.",
+    "expected_domain": "carbon_capture_materials",
+    "expected_category": "co2_capture_material",
+    "must_include_terms": ["CO2 capture", "flue gas", "chemisorption", "selectivity", "regeneration", "activated carbon"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "water treatment", "fabric"],
+    "expected_sections": ["composition", "validation_plan", "processing_method"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "co2_003",
+    "domain": "carbon_capture_materials",
+    "request": "Moisture-stable carbon dioxide capture material for humid environments. The sorbent combines zeolite with moisture-blocking polymer coating and amine functionality. Design requirements: (1) maintain >2 mol CO₂/kg capacity in 60% relative humidity, (2) avoid amine hydrolysis and loss, (3) regenerate with swing temperature (60-100°C), and (4) perform effectively for equipment deployment in coastal/tropical regions.",
+    "expected_domain": "carbon_capture_materials",
+    "expected_category": "co2_capture_material",
+    "must_include_terms": ["CO2 capture", "carbon capture", "amine", "moisture", "humidity", "regeneration", "polymer coating"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "produced water", "fabric"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "co2_004",
+    "domain": "carbon_capture_materials",
+    "request": "Pressure swing adsorption (PSA) sorbent for point-source CO₂ capture at industrial facilities (cement, steel, ammonia plants). The adsorbent combines hierarchical porous carbon with polyamine for rapid cycling: (1) 5-min adsorption at 10 bar CO₂, (2) 5-min regeneration at 1 bar (vacuum-assisted), (3) >95 wt% recovery, and (4) stable performance over 5000+ cycles.",
+    "expected_domain": "carbon_capture_materials",
+    "expected_category": "co2_capture_material",
+    "must_include_terms": ["CO2 capture", "pressure swing", "PSA", "industrial", "regeneration", "rapid cycling"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "water treatment"],
+    "expected_sections": ["composition", "validation_plan", "characterization_methods"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "co2_005",
+    "domain": "carbon_capture_materials",
+    "request": "Post-combustion carbon capture sorbent for retrofitting existing fossil fuel power plants. The material captures 90% of flue gas CO₂ (5-8% CO₂, 70-100°C, 1 bar). Design uses pelletized activated carbon with K2CO3/NaOH impregnation in moving bed reactors. Regeneration targets: (1) thermal swing 150-180°C, (2) <3 MJ/kg energy demand, and (3) maintain capacity through 500+ cycles.",
+    "expected_domain": "carbon_capture_materials",
+    "expected_category": "co2_capture_material",
+    "must_include_terms": ["CO2 capture", "post-combustion", "flue gas", "power plant", "activated carbon", "regeneration"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "produced water", "fabric", "roof"],
+    "expected_sections": ["composition", "validation_plan", "safety_tests"],
+    "forbidden_sections": [],
+    "severity_if_failed": "critical"
+  },
+  {
+    "id": "co2_006",
+    "domain": "carbon_capture_materials",
+    "request": "Metal-organic framework (MOF) for CO₂ capture with high selectivity over N₂. The framework combines zinc ions with organic linkers optimized for CO₂ binding. Specifications: (1) >50 mol CO₂/kg capacity at 1 bar and 25°C, (2) CO₂/N₂ selectivity >100, (3) rapid adsorption (breakthrough <5 min), (4) regeneration at 60°C vacuum, and (5) long-term stability >1000 cycles.",
+    "expected_domain": "carbon_capture_materials",
+    "expected_category": "co2_capture_material",
+    "must_include_terms": ["CO2 capture", "MOF", "metal-organic framework", "selectivity", "capacity", "regeneration"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "water treatment"],
+    "expected_sections": ["composition", "characterization_methods", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  },
+  {
+    "id": "co2_007",
+    "domain": "carbon_capture_materials",
+    "request": "Temperature-swing adsorption sorbent for continuous CO₂ removal from industrial exhaust. The material uses amine-impregnated resin with optimized thermal swing between 50°C (adsorption) and 120°C (regeneration). Performance criteria: (1) CO₂ capacity 2-3 mol/kg, (2) fast kinetics for 30-min cycles, (3) minimal energy demand for regeneration, and (4) no chemical loss over 2000+ cycles.",
+    "expected_domain": "carbon_capture_materials",
+    "expected_category": "co2_capture_material",
+    "must_include_terms": ["CO2 capture", "temperature swing", "regeneration", "amine", "kinetics", "cycles"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "produced water"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  },
+  {
+    "id": "co2_008",
+    "domain": "carbon_capture_materials",
+    "request": "Modular CO₂ capture cartridge for retrofit applications in HVAC systems of large buildings. Each cartridge treats 1000-2000 CFM of indoor air to maintain <500 ppm CO₂ (comfort standard). Design combines granular amine sorbent with moisture desiccant layer. Service life: 1-2 years before regeneration, with field-level changeout procedure.",
+    "expected_domain": "carbon_capture_materials",
+    "expected_category": "co2_capture_material",
+    "must_include_terms": ["CO2 capture", "HVAC", "modular", "cartridge", "amine", "desiccant"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "fabric"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "low"
+  }
+]

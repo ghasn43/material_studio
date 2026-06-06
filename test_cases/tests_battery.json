@@ -1,0 +1,98 @@
+[
+  {
+    "id": "battery_001",
+    "domain": "battery_electrochemical",
+    "request": "Sodium-ion battery anode composite combining hard carbon with carbon black conductive additive and sodium-compatible binder (CMC/SBR). The material targets: (1) specific capacity >300 mAh/g at C/10 rate, (2) excellent rate capability to 2C, (3) coulombic efficiency >98% for 100 cycles, (4) low volume expansion <20%, and (5) electrochemical impedance spectroscopy (EIS) analysis to track SEI formation and stability.",
+    "expected_domain": "battery_electrochemical",
+    "expected_category": "sodium_ion_battery_anode_composite",
+    "must_include_terms": ["sodium-ion", "anode", "hard carbon", "capacity", "coulombic efficiency", "electrochemical"],
+    "must_not_include_terms": ["phosphate recovery", "water treatment", "produced water", "fabric"],
+    "expected_sections": ["composition", "category_specific_parameters", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "critical"
+  },
+  {
+    "id": "battery_002",
+    "domain": "battery_electrochemical",
+    "request": "Lithium-ion battery cathode composite: LiCoO₂ blended with nickel oxide and manganese oxide to enhance cycling stability and lower cobalt content. Half-cell testing targets: (1) discharge capacity >180 mAh/g at C/20, (2) capacity retention >80% after 200 cycles, (3) safe operation to 4.5V vs Li/Li+, and (4) electrochemical impedance tracking to assess structural stability.",
+    "expected_domain": "battery_electrochemical",
+    "expected_category": "sodium_ion_battery_anode_composite",
+    "must_include_terms": ["lithium-ion", "cathode", "capacity", "cycling", "electrochemical", "voltage"],
+    "must_not_include_terms": ["phosphate", "water treatment", "produced water", "fabric", "roof"],
+    "expected_sections": ["composition", "validation_plan", "characterization_methods"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "battery_003",
+    "domain": "battery_electrochemical",
+    "request": "Silicon-based anode composite for high-energy-density lithium-ion batteries. Silicon nanoparticles are embedded in carbon matrix with optimized binder formulation to manage volume expansion. Electrochemical testing: (1) initial capacity 2500+ mAh/g, (2) stable capacity >1200 mAh/g after 100 cycles, (3) coulombic efficiency >95%, and (4) galvanostatic charge-discharge at multiple rates (C/20 to 2C).",
+    "expected_domain": "battery_electrochemical",
+    "expected_category": "sodium_ion_battery_anode_composite",
+    "must_include_terms": ["anode", "silicon", "lithium-ion", "capacity", "cycling", "coulombic efficiency"],
+    "must_not_include_terms": ["phosphate", "water treatment", "fabric", "roof"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "battery_004",
+    "domain": "battery_electrochemical",
+    "request": "Solid-state battery anode: metallic lithium or sodium metal deposited on current collector with ceramic electrolyte. Key metrics: (1) electrochemical stability up to 5.0V, (2) reversible plating/stripping for 500+ cycles without dendrite, (3) galvanostatic testing at increasing current densities (0.5-10 mA/cm²), and (4) EIS characterization of solid electrolyte interface (SEI).",
+    "expected_domain": "battery_electrochemical",
+    "expected_category": "sodium_ion_battery_anode_composite",
+    "must_include_terms": ["anode", "lithium metal", "sodium metal", "electrochemical", "cycling", "solid-state"],
+    "must_not_include_terms": ["phosphate", "water treatment", "fabric", "roof"],
+    "expected_sections": ["composition", "characterization_methods", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "battery_005",
+    "domain": "battery_electrochemical",
+    "request": "Potassium-ion battery anode material based on graphite or metal oxide. The anode shows: (1) reversible K+ intercalation capacity >200 mAh/g, (2) lower voltage window compared to lithium (0.5-2.5V vs K+/K), (3) excellent cycle life 500+ cycles, and (4) electrochemical impedance revealing ion transport kinetics and electrode interface stability.",
+    "expected_domain": "battery_electrochemical",
+    "expected_category": "sodium_ion_battery_anode_composite",
+    "must_include_terms": ["potassium-ion", "anode", "capacity", "electrochemical", "cycling", "voltage"],
+    "must_not_include_terms": ["phosphate", "water treatment", "fabric"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  },
+  {
+    "id": "battery_006",
+    "domain": "battery_electrochemical",
+    "request": "Dual-carbon battery anode-cathode system: activated carbon or hard carbon for both terminals, avoiding materials scarcity. Performance targets: (1) cell voltage 1.0-2.0V (asymmetric configuration), (2) energy density 50-100 Wh/kg, (3) cycle life >1000 cycles, (4) high rate capability (10C discharge), and (5) low-cost manufacturing compatible with mass production.",
+    "expected_domain": "battery_electrochemical",
+    "expected_category": "sodium_ion_battery_anode_composite",
+    "must_include_terms": ["anode", "carbon", "battery", "capacity", "cycle life", "electrochemical"],
+    "must_not_include_terms": ["phosphate", "water treatment", "fabric", "roof"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  },
+  {
+    "id": "battery_007",
+    "domain": "battery_electrochemical",
+    "request": "Electrolyte additive material for lithium-ion battery to improve cycling stability and suppress dendrite formation. Additives tested: (1) lithium nitrate (LiNO₃), (2) phosphorus pentoxide compounds, (3) silicon-containing salts. Electrochemical evaluation includes galvanostatic charge-discharge curves, coulombic efficiency, electrochemical impedance spectroscopy (EIS), and extended cycling (500+ cycles).",
+    "expected_domain": "battery_electrochemical",
+    "expected_category": "sodium_ion_battery_anode_composite",
+    "must_include_terms": ["electrolyte", "additive", "battery", "lithium-ion", "cycling", "electrochemical"],
+    "must_not_include_terms": ["phosphate recovery", "water treatment", "fabric"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  },
+  {
+    "id": "battery_008",
+    "domain": "battery_electrochemical",
+    "request": "Zinc-air battery anode: porous zinc foam or zinc powder composite that enables high capacity utilization with reversible electrochemistry. Testing: (1) galvanostatic discharge to 0.6V cutoff, (2) reversible charging with appropriate catalyst/electrolyte, (3) cycle life assessment 100-500 cycles, (4) energy efficiency >60% (discharge/charge voltage ratio), and (5) safety testing for thermal runaway prevention.",
+    "expected_domain": "battery_electrochemical",
+    "expected_category": "sodium_ion_battery_anode_composite",
+    "must_include_terms": ["zinc-air", "anode", "battery", "capacity", "cycling", "electrochemical"],
+    "must_not_include_terms": ["phosphate", "water treatment", "fabric", "roof"],
+    "expected_sections": ["composition", "validation_plan", "safety_tests"],
+    "forbidden_sections": [],
+    "severity_if_failed": "low"
+  }
+]

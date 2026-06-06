@@ -1,0 +1,98 @@
+[
+  {
+    "id": "produced_water_001",
+    "domain": "oil_gas_water",
+    "request": "Produced water treatment media for ADNOC operations in UAE oil fields. The wastewater contains 15-25 g/L total dissolved solids (TDS), 2-5 mg/L total oil and grease (TOG), 200-500 ppm sulfide, and colloidal particles. The pretreatment material must reduce oil/grease to <1 ppm for downstream membrane unit, remove sulfide to <0.1 ppm to prevent corrosion, and withstand high salinity (NaCl-dominated). Backwash regeneration in 2-3 hours enables continuous operation.",
+    "expected_domain": "oil_gas_water",
+    "expected_category": "oil_gas_produced_water_pretreatment_media",
+    "must_include_terms": ["produced water", "oil and gas", "ADNOC", "UAE", "TOG", "sulfide", "salinity", "pretreatment"],
+    "must_not_include_terms": ["phosphate recovery", "battery", "electrode", "fabric", "roof"],
+    "expected_sections": ["composition", "category_specific_parameters", "validation_plan"],
+    "forbidden_sections": ["phosphate recovery parameters"],
+    "severity_if_failed": "critical"
+  },
+  {
+    "id": "produced_water_002",
+    "domain": "oil_gas_water",
+    "request": "Hydrocarbon removal media for North Sea offshore platform produced water. The feed stream contains crude oil, paraffins, asphaltenes, and emulsified water at 40-60°C. Design a high-capacity adsorbent using activated carbon and polymeric resin blend to achieve <5 ppm residual hydrocarbon and stable performance through 50+ backwash cycles. The material must resist biofouling and be compatible with seawater disposal regulations.",
+    "expected_domain": "oil_gas_water",
+    "expected_category": "oil_gas_produced_water_pretreatment_media",
+    "must_include_terms": ["produced water", "hydrocarbon", "crude oil", "offshore", "adsorbent", "backwash", "seawater"],
+    "must_not_include_terms": ["phosphate", "battery", "electrode", "fabric", "roof", "thermal"],
+    "expected_sections": ["composition", "validation_plan", "processing_method"],
+    "forbidden_sections": [],
+    "severity_if_failed": "critical"
+  },
+  {
+    "id": "produced_water_003",
+    "domain": "oil_gas_water",
+    "request": "Sulfide control material for preventing corrosion in produced water reinjection systems. The wastewater stream from gas production contains 50-200 ppm H2S and CO2 from the reservoir. The adsorbent must: (1) reduce H2S to <2 ppm, (2) withstand pH 5.5-6.5, (3) avoid iron sulfide precipitation that could foul injection wells, and (4) maintain performance through regeneration with air oxidation at 60°C.",
+    "expected_domain": "oil_gas_water",
+    "expected_category": "oil_gas_produced_water_pretreatment_media",
+    "must_include_terms": ["produced water", "sulfide", "H2S", "corrosion", "reinjection", "regeneration"],
+    "must_not_include_terms": ["phosphate", "battery", "electrode", "membrane filtration", "fabric"],
+    "expected_sections": ["composition", "validation_plan", "safety_tests"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "produced_water_004",
+    "domain": "oil_gas_water",
+    "request": "Anti-fouling pretreatment for membrane feed in an oilfield water reuse system. The produced water contains 1.5-3.0 g/L TOC (dissolved organics), 0.5-2 mg/L oil emulsion, and 3-5 µm suspended solids. Design a composite media combining coagulation aid, activated carbon, and ion-exchange resin to achieve <100 ppm TOC and <0.5 mg/L turbidity to protect downstream RO and NF membranes.",
+    "expected_domain": "oil_gas_water",
+    "expected_category": "oil_gas_produced_water_pretreatment_media",
+    "must_include_terms": ["produced water", "anti-fouling", "membrane", "oil", "TOC", "pretreatment", "RO"],
+    "must_not_include_terms": ["phosphate", "battery", "electrode", "photocatalytic", "fabric"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "produced_water_005",
+    "domain": "oil_gas_water",
+    "request": "Multi-stage produced water treatment train material for ultra-low discharge operations. Stage 1 removes bulk oil (<5 mg/L target), Stage 2 removes dissolved organics (<100 ppm TOC), and Stage 3 polishes for trace metals and sulfide (<0.1 ppm). Each stage uses different activated carbon grades optimized for the target pollutant. Performance must meet 'produced water is drinking quality' standards for inland discharge.",
+    "expected_domain": "oil_gas_water",
+    "expected_category": "oil_gas_produced_water_pretreatment_media",
+    "must_include_terms": ["produced water", "oil", "TOC", "sulfide", "activated carbon", "multi-stage", "discharge"],
+    "must_not_include_terms": ["phosphate", "battery", "electrode", "roof"],
+    "expected_sections": ["composition", "validation_plan", "processing_method"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "produced_water_006",
+    "domain": "oil_gas_water",
+    "request": "Gulf conditions produced water treatment: high salinity (45-55 g/L NaCl), elevated temperature (45-50°C), sulfide (100-300 ppm), and TOC (1-3 g/L). The pretreatment media must tolerate thermal cycling (ambient to 50°C repeatedly), resist osmotic stress, and achieve stable performance for injection into formation with <5000 ppm total dissolved solids.",
+    "expected_domain": "oil_gas_water",
+    "expected_category": "oil_gas_produced_water_pretreatment_media",
+    "must_include_terms": ["produced water", "Gulf", "salinity", "temperature", "sulfide", "pretreatment", "injection"],
+    "must_not_include_terms": ["phosphate", "battery", "electrode", "fabric"],
+    "expected_sections": ["composition", "validation_plan", "safety_tests"],
+    "forbidden_sections": [],
+    "severity_if_failed": "critical"
+  },
+  {
+    "id": "produced_water_007",
+    "domain": "oil_gas_water",
+    "request": "Biofilm-resistant pretreatment media for treating produced water in remote offshore operations where maintenance intervals exceed 6 months. The material must inhibit bacterial colonization (SRB, APB) that could cause biofouling and hydrogen sulfide generation. Design using antimicrobial nanoparticles (ZnO, copper) immobilized on activated carbon with mechanical backwash capability.",
+    "expected_domain": "oil_gas_water",
+    "expected_category": "oil_gas_produced_water_pretreatment_media",
+    "must_include_terms": ["produced water", "biofilm", "antimicrobial", "activated carbon", "offshore", "SRB"],
+    "must_not_include_terms": ["phosphate", "battery", "electrode", "fabric", "roof"],
+    "expected_sections": ["composition", "characterization_methods", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  },
+  {
+    "id": "produced_water_008",
+    "domain": "oil_gas_water",
+    "request": "Modular cartridge-based produced water pretreatment for equipment skid deployment. Each cartridge processes 5-10 bbl/day, uses 2-stage media (coarse followed by fine), enables field-level media exchange without specialist training, and integrates pressure monitoring for backwash sequencing. Total dissolved solids (TDS) pass-through target <2000 ppm for potable reuse in remote areas.",
+    "expected_domain": "oil_gas_water",
+    "expected_category": "oil_gas_produced_water_pretreatment_media",
+    "must_include_terms": ["produced water", "modular", "cartridge", "pretreatment", "TDS", "backwash"],
+    "must_not_include_terms": ["phosphate", "battery", "electrode", "fabric"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  }
+]

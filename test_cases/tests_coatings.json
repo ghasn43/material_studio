@@ -1,0 +1,98 @@
+[
+  {
+    "id": "coating_001",
+    "domain": "coatings_construction",
+    "request": "Roof waterproofing coating for concrete substrates: polyurethane or acrylic base with integrated thermal insulation properties. Design requirements: (1) withstand UV exposure 10+ years in tropical climate, (2) prevent rainwater leakage through cracks up to 2mm, (3) reduce surface temperature 5-10°C vs uncoated roof (solar reflectance >0.6), (4) maintain flexibility at -20 to +70°C, and (5) adhesion rating ≥ 4B per ASTM D3359.",
+    "expected_domain": "coatings_construction",
+    "expected_category": "roof_waterproofing_thermal_insulation_coating",
+    "must_include_terms": ["roof", "waterproofing", "coating", "thermal", "UV resistance", "adhesion"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "water treatment", "fabric"],
+    "expected_sections": ["composition", "category_specific_parameters", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "critical"
+  },
+  {
+    "id": "coating_002",
+    "domain": "coatings_construction",
+    "request": "Photocatalytic self-cleaning building facade coating: TiO₂ nanoparticles dispersed in acrylic resin. Specifications: (1) photocatalytic activity under UV and visible light, (2) >90% bacterial reduction within 2-4 hours UV exposure, (3) organic stain (algae, mold) prevention for 3+ years without cleaning, (4) water contact angle <20° (superhydrophilic), and (5) durability through 500+ weathering cycles (ASTM G154).",
+    "expected_domain": "coatings_construction",
+    "expected_category": "self_cleaning_building_coating",
+    "must_include_terms": ["self-cleaning", "TiO2", "photocatalytic", "facade", "building coating", "UV"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "water treatment"],
+    "expected_sections": ["composition", "validation_plan", "characterization_methods"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "coating_003",
+    "domain": "coatings_construction",
+    "request": "Thermal insulation composite coating for exterior building walls: epoxy matrix with hollow glass microspheres and aerogel particles. Performance targets: (1) thermal conductivity <0.08 W/m·K, (2) fire rating UL-94 V-0, (3) tensile strength >2 MPa, (4) water absorption <5%, (5) adhesion to concrete/steel substrates ≥4B, and (6) long-term performance over 20-year exposure.",
+    "expected_domain": "coatings_construction",
+    "expected_category": "thermal_insulation_composite",
+    "must_include_terms": ["thermal insulation", "coating", "building", "thermal conductivity", "fire resistance"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "water treatment", "fabric"],
+    "expected_sections": ["composition", "validation_plan", "safety_tests"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "coating_004",
+    "domain": "coatings_construction",
+    "request": "Anti-fouling external building coating to resist dirt, algae, and biofilm growth. The coating combines hydrophobic polymers with biocide nanoparticles (copper, zinc oxide). Validation includes: (1) visual algal growth assessment over 12-month outdoor exposure, (2) water runoff testing to confirm self-cleaning action, (3) durability in temperate and tropical climates, and (4) toxicity screening for environmental compliance.",
+    "expected_domain": "coatings_construction",
+    "expected_category": "self_cleaning_building_coating",
+    "must_include_terms": ["coating", "anti-fouling", "building", "biocide", "algae resistance", "self-cleaning"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "water treatment"],
+    "expected_sections": ["composition", "validation_plan", "safety_tests"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  },
+  {
+    "id": "coating_005",
+    "domain": "coatings_construction",
+    "request": "Reflective thermal roof coating for cool roof applications in hot climates. Formulation: white pigment (TiO₂, CaCO₃) in acrylic latex with solar reflectance >0.7 and thermal emittance >0.75 per ASTM E903. Building integration: (1) reduce interior temperature 3-5°C, (2) lower HVAC energy 15-20%, (3) maintain reflectance >65% after 3-year weathering, (4) compatible with single-ply membranes.",
+    "expected_domain": "coatings_construction",
+    "expected_category": "roof_waterproofing_thermal_insulation_coating",
+    "must_include_terms": ["roof", "coating", "thermal", "reflectance", "cool roof", "building"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "water treatment"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  },
+  {
+    "id": "coating_006",
+    "domain": "coatings_construction",
+    "request": "Seismic-resistant waterproofing coating for concrete bridge decks: polyurethane or epoxy base with elastic properties for joint movement accommodation. Design targets: (1) elongation at break >300%, (2) tear resistance >5 N/mm, (3) waterproofing to 5 m water head per ASTM D751, (4) adhesion to wet concrete surfaces, and (5) performance through 100+ thermal cycles (-20 to +50°C).",
+    "expected_domain": "coatings_construction",
+    "expected_category": "roof_waterproofing_thermal_insulation_coating",
+    "must_include_terms": ["waterproofing", "coating", "bridge", "seismic", "elasticity", "adhesion"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "water treatment", "fabric"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  },
+  {
+    "id": "coating_007",
+    "domain": "coatings_construction",
+    "request": "Intumescent fire-protective coating for steel structures: expanded polyol with flame-retardant additives (halogen-free). Specifications: (1) applied at 2-3 mm thickness, (2) limiting steel temperature to <260°C during 30-min fire exposure per ASTM E119, (3) adhesion 4B minimum per ASTM D3359, (4) durability 10+ years ambient storage, and (5) environmental safety meeting low-VOC standards.",
+    "expected_domain": "coatings_construction",
+    "expected_category": "self_cleaning_building_coating",
+    "must_include_terms": ["coating", "fire protection", "intumescent", "steel", "thermal resistance"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "water treatment"],
+    "expected_sections": ["composition", "validation_plan", "safety_tests"],
+    "forbidden_sections": [],
+    "severity_if_failed": "high"
+  },
+  {
+    "id": "coating_008",
+    "domain": "coatings_construction",
+    "request": "Modular roofing panel with integrated thermal insulation and waterproofing: spray-applied closed-cell polyurethane foam core (R-value 6.0/inch) encapsulated in waterproof membranes. Performance: (1) thermal resistance R-30 for typical roof, (2) continuous waterproofing without seams, (3) adhesion to concrete and metal substrates, (4) impact resistance to hail (ASTM D3746), and (5) 30-year durability warranty.",
+    "expected_domain": "coatings_construction",
+    "expected_category": "thermal_insulation_composite",
+    "must_include_terms": ["roof", "thermal insulation", "waterproofing", "coating", "polyurethane", "durability"],
+    "must_not_include_terms": ["battery", "electrode", "phosphate", "water treatment"],
+    "expected_sections": ["composition", "validation_plan"],
+    "forbidden_sections": [],
+    "severity_if_failed": "medium"
+  }
+]
