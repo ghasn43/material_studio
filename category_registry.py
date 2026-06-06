@@ -4299,9 +4299,9 @@ def validate_negative_keywords(material_data: dict, selected_category: str) -> d
     
     # Check composition, validation plan, and processing method for contamination
     text_fields = [
-        material_data.get("processing_method", ""),
-        str(material_data.get("composition", "")),
-        str(material_data.get("validation_plan", "")),
+        material_data.get("processing_method") or "",
+        str(material_data.get("composition") or ""),
+        str(material_data.get("validation_plan") or ""),
     ]
     combined_text = " ".join(text_fields).lower()
     
@@ -4370,7 +4370,7 @@ def perform_report_self_audit(material_data: dict, selected_category: str) -> di
     audit_result["items_checked"].append("validation_plan_match")
     
     # Check 3: Processing method belongs to category
-    processing_method = material_data.get("processing_method", "")
+    processing_method = material_data.get("processing_method") or ""
     expected_processing_keywords = preset.get("priority_keywords", [])[:5]
     method_keywords_found = sum(1 for keyword in expected_processing_keywords if keyword.lower() in processing_method.lower())
     if method_keywords_found < len(expected_processing_keywords) * 0.3:
@@ -4385,7 +4385,7 @@ def perform_report_self_audit(material_data: dict, selected_category: str) -> di
     audit_result["items_checked"].append("negative_keywords")
     
     # Check 5: No forbidden domain terms in disclaimer
-    disclaimer = material_data.get("category_disclaimer", "").lower()
+    disclaimer = (material_data.get("category_disclaimer") or "").lower()
     category_domain = CATEGORY_TO_DOMAIN_SPECIFIC.get(selected_category, "unknown")
     if category_domain in DOMAIN_DEFINITIONS:
         forbidden_terms = DOMAIN_DEFINITIONS[category_domain].get("forbidden_keywords", [])
